@@ -9,5 +9,4 @@ public class AuroraApplication {
 	static void main(String[] args) {
 		SpringApplication.run(AuroraApplication.class, args);
 	}
-
 }
