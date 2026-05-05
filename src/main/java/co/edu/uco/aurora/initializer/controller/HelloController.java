@@ -8,7 +8,7 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String sayHello() {
-        return "¡Hola Mundo! El backend de Aurora está vivo y funcionando en la nube.";
+        return "¡Hola Mundo! El backend de Aurora está vivo y funcionando en la nube con despliegue automatico en Render.";
     }
 
 }
