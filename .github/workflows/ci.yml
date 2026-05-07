@@ -1,0 +1,26 @@
+name: Java CI with Doppler
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 26
+        uses: actions/setup-java@v4
+        with:
+          java-version: '26'
+          distribution: 'temurin'
+
+      - name: Install Doppler CLI
+        uses: dopplerhq/cli-action@v1
+
+      - name: Build and Test
+        run: doppler run -- ./mvnw clean install
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
