@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "TiposIdentificacion")
-public class IdentifycationTypeJpaEntity {
+public class IdentificationTypeJpaEntity {
 
     @Id
     @Column(name = "id")
@@ -18,11 +18,11 @@ public class IdentifycationTypeJpaEntity {
     @Column(name = "nombre")
     private String name;
 
-    public IdentifycationTypeJpaEntity() {
+    public IdentificationTypeJpaEntity() {
         super();
     }
 
-    public IdentifycationTypeJpaEntity(UUID id, String name) {
+    public IdentificationTypeJpaEntity(UUID id, String name) {
         super();
         setId(id);
         setName(name);

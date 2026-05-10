@@ -1,16 +1,16 @@
 package co.edu.uco.aurora.infrastructure.persistence.repository;
 
-import co.edu.uco.aurora.infrastructure.persistence.repository.sql.jpa.entity.IdentifycationTypeJPAEntity;
+import co.edu.uco.aurora.infrastructure.persistence.repository.entity.IdentificationTypeEntity;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface IdentifycationTypeRepository {
+public interface IdentificationTypeRepository {
 
-    List<IdentifycationTypeJPAEntity> findAll();
+    List<IdentificationTypeEntity> findAll();
 
-    IdentifycationTypeJPAEntity findById(IdentifycationTypeJPAEntity filter);
+    IdentificationTypeEntity findById(IdentificationTypeEntity filter);
 
-    IdentifycationTypeJPAEntity findById(UUID id);
+    IdentificationTypeEntity findById(UUID id);
 
 }

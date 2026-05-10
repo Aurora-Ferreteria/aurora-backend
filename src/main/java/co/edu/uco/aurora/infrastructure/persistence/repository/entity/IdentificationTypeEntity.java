@@ -1,4 +1,35 @@
 package co.edu.uco.aurora.infrastructure.persistence.repository.entity;
 
-public class IdTypeEntity {
+import java.util.UUID;
+
+public class IdentificationTypeEntity {
+
+    private UUID id;
+    private String name;
+
+    public IdentificationTypeEntity() {
+        super();
+    }
+
+    public IdentificationTypeEntity(UUID id, String name) {
+        super();
+        setId(id);
+        setName(name);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    private void setName(String name) {
+        this.name = name;
+    }
 }

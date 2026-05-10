@@ -6,5 +6,5 @@ import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domai
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface AddCustomerMapper extends DTOMapper<AddCustomerDTO, AddCustomerDomain> {
+public interface AddCustomerDTOMapper extends DTOMapper<AddCustomerDTO, AddCustomerDomain> {
 }
