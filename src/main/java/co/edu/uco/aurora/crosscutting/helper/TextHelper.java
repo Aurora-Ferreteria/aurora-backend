@@ -29,7 +29,7 @@ public final class TextHelper {
 
     public static boolean isValidPhoneNumber(final String value) {
         final var phone = getDefaultWithTrim(value);
-        return !isEmpty(phone) && phone.matches("^\\+?[0-9]{7,20}$");
+        return !isEmpty(phone) && phone.matches("^\\+?\\d{7,20}$");
     }
 
     public static boolean isValidEmail(final String value) {
