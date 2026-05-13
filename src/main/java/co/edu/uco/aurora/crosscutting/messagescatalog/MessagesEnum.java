@@ -59,6 +59,34 @@ public enum MessagesEnum {
     ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_DEFAULT(
             "El identificador de [{0}] no es un valor válido.",
                     "La regla IdValueIsNotDefaultValueRule falló porque el UUID para el dato [{0}] es el valor por defecto (ceros)."
+    ),
+
+
+    ID_TYPE_EXISTS_BY_ID_RULE_DATA_IS_NULL(
+            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
+                    "No se recibieron los parámetros requeridos para ejecutar la regla IdentificationTypeExistsByIdRule."
+    ),
+    ID_TYPE_EXISTS_BY_ID_RULE_DATA_LENGTH_INVALID(
+            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
+                    "Se requerían dos parámetros y llegó una cantidad menor para ejecutar la regla IdentificationTypeExistsByIdRule."
+    ),
+    ID_TYPE_EXISTS_BY_ID_RULE_ID_TYPE_NOT_FOUND(
+            "El tipo de identificación proporcionado no es válido o no existe en el sistema.",
+                    "La regla IdentificationTypeExistsByIdRule falló porque no se encontró un registro en la base de datos con el ID: {0}"
+    ),
+
+
+    CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_DATA_IS_NULL(
+            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
+            "No se recibieron los parámetros requeridos para ejecutar la regla CustomerIdentificationNumberDoesNotExistRule."
+    ),
+    CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_DATA_LENGTH_INVALID(
+            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
+            "Se requerían dos parámetros y llegó una cantidad menor para ejecutar la regla CustomerIdentificationNumberDoesNotExistRule."
+    ),
+    CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS(
+            "El número de identificación ingresado ya se encuentra registrado en el sistema.",
+            "La regla CustomerIdentificationNumberDoesNotExistRule falló porque ya existe un cliente con el número de identificación: {0}"
     );
 
     private final String title;

@@ -6,7 +6,7 @@ import co.edu.uco.aurora.crosscutting.helper.ObjectHelper;
 import co.edu.uco.aurora.crosscutting.helper.TextHelper;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 
-public class StringValuesIsPresentRule implements Rule {
+public final class StringValuesIsPresentRule implements Rule {
 
     private static final Rule instance = new StringValuesIsPresentRule();
 

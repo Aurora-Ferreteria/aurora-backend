@@ -13,4 +13,6 @@ public interface IdentificationTypeRepository {
 
     IdentificationTypeEntity findById(UUID id);
 
+    boolean existsById(UUID id);
+
 }

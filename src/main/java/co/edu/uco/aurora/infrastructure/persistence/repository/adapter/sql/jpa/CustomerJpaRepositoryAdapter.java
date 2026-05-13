@@ -61,4 +61,9 @@ public class CustomerJpaRepositoryAdapter implements CustomerRepository {
                 .map(mapper::toEntity)
                 .orElse(null);
     }
+
+    @Override
+    public boolean existsByIdentificationNumber(String identificationNumber) {
+        return repository.existsByIdentificationNumber(identificationNumber);
+    }
 }
