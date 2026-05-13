@@ -19,4 +19,6 @@ public interface CustomerRepository {
 
     CustomerEntity findById(UUID id);
 
+    boolean existsByIdentificationNumber(String identificationNumber);
+
 }
