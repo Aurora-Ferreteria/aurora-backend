@@ -1,5 +1,8 @@
 package co.edu.uco.aurora.crosscutting.helper;
 
+import java.text.MessageFormat;
+import java.util.regex.Pattern;
+
 public final class TextHelper {
 
     private static final String EMPTY = "";
@@ -59,5 +62,19 @@ public final class TextHelper {
                 :getDefault(value));
 
         return text.matches(pattern);
+    }
+
+    public static boolean matchesRegex(final String text, final String regex) {
+        if (isEmpty(text) || isEmpty(regex)) {
+            return false;
+        }
+        return Pattern.matches(regex, text);
+    }
+
+    public static String format(final String message, final String... params) {
+        if (isEmpty(message)) {
+            return getDefault();
+        }
+        return MessageFormat.format(message, (Object[]) params);
     }
 }
