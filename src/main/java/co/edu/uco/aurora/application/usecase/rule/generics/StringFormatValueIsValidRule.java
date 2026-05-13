@@ -36,25 +36,22 @@ public class StringFormatValueIsValidRule implements Rule {
         var stringData = (String) data[0];
         var dataName = (String) data[1];
         var regex = (String) data[2];
-        var mustApplyTrim = (Boolean) data[3];
+        boolean mustApplyTrim = (boolean) data[3];
 
         var dataToValidate = (mustApplyTrim)
                 ? TextHelper.getDefaultWithTrim(stringData)
                 : stringData;
 
-        if (!TextHelper.isEmpty(dataToValidate)) {
-
-            if (!TextHelper.matchesRegex(dataToValidate, regex)) {
-                var userMessage = TextHelper.format(
-                        MessagesEnum.STRING_FORMAT_VALUES_IS_VALID_RULE_FORMAT_IS_INVALID.getTitle(),
-                        dataName
-                );
-                var technicalMessage = TextHelper.format(
-                        MessagesEnum.STRING_FORMAT_VALUES_IS_VALID_RULE_FORMAT_IS_INVALID.getContent(),
-                        dataName, regex
-                );
-                throw AuroraException.create(userMessage, technicalMessage);
-            }
+        if (!TextHelper.isEmpty(dataToValidate) && !TextHelper.matchesRegex(dataToValidate, regex)) {
+            var userMessage = TextHelper.format(
+                    MessagesEnum.STRING_FORMAT_VALUES_IS_VALID_RULE_FORMAT_IS_INVALID.getTitle(),
+                    dataName
+            );
+            var technicalMessage = TextHelper.format(
+                    MessagesEnum.STRING_FORMAT_VALUES_IS_VALID_RULE_FORMAT_IS_INVALID.getContent(),
+                    dataName, regex
+            );
+            throw AuroraException.create(userMessage, technicalMessage);
         }
     }
 }
