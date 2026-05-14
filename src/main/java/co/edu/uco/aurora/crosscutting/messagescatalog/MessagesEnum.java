@@ -87,6 +87,47 @@ public enum MessagesEnum {
     CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS(
             "El número de identificación ingresado ya se encuentra registrado en el sistema.",
             "La regla CustomerIdentificationNumberDoesNotExistRule falló porque ya existe un cliente con el número de identificación: {0}"
+    ),
+
+
+    CUSTOMER_PHONE_NUMBER_DOES_NOT_EXIST_RULE_DATA_IS_NULL(
+            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
+                    "No se recibieron los parámetros requeridos para ejecutar la regla CustomerPhoneNumberDoesNotExistRule."
+    ),
+    CUSTOMER_PHONE_NUMBER_DOES_NOT_EXIST_RULE_DATA_LENGTH_INVALID(
+            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
+                    "Se requerían dos parámetros y llegó una cantidad menor para ejecutar la regla CustomerPhoneNumberDoesNotExistRule."
+    ),
+    CUSTOMER_PHONE_NUMBER_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS(
+            "El número de teléfono ingresado ya se encuentra registrado en el sistema.",
+                    "La regla CustomerPhoneNumberDoesNotExistRule falló porque ya existe un cliente con el número de teléfono: {0}"
+    ),
+
+
+    CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_DATA_IS_NULL(
+            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
+                    "No se recibieron los parámetros requeridos para ejecutar la regla CustomerEmailDoesNotExistRule."
+    ),
+    CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_DATA_LENGTH_INVALID(
+            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
+                    "Se requerían dos parámetros y llegó una cantidad menor para ejecutar la regla CustomerEmailDoesNotExistRule."
+    ),
+    CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS(
+            "El correo electrónico ingresado ya se encuentra registrado en el sistema.",
+                    "La regla CustomerEmailDoesNotExistRule falló porque ya existe un cliente con el correo electrónico: {0}"
+    ),
+
+
+    // =================================================================================
+    // MENSAJES PARA EL CONTROLADOR: AddCustomerController
+    // =================================================================================
+    CUSTOMER_REGISTER_SUCCESS(
+            "Operación realizada con éxito.",
+            "El cliente se ha registrado exitosamente en el sistema."
+    ),
+    CUSTOMERS_UNEXPECTED_ERROR(
+            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
+            "Ocurrió un error inesperado al intentar registrar el nuevo cliente. Por favor, contacte al administrador del sistema."
     );
 
     private final String title;

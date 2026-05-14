@@ -3,7 +3,7 @@ package co.edu.uco.aurora.features.identificationtype.application.usecase.rule.v
 import co.edu.uco.aurora.features.identificationtype.application.usecase.rule.IdentificationTypeExistByIdRule;
 import co.edu.uco.aurora.application.usecase.rule.validator.Validator;
 
-public class ValidateIdentificationTypeExistsById implements Validator {
+public final class ValidateIdentificationTypeExistsById implements Validator {
 
     private static final Validator instance = new ValidateIdentificationTypeExistsById();
 

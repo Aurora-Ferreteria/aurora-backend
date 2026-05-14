@@ -9,15 +9,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Repository
-public class CustomerJpaRepositoryAdapter implements CustomerRepository {
+public class CustomerJpaRepositoryInteractor implements CustomerRepository {
 
     private final CustomerJpaRepository repository;
     private final CustomerJpaMapper mapper;
 
-    public CustomerJpaRepositoryAdapter(CustomerJpaRepository repository, CustomerJpaMapper mapper) {
+    public CustomerJpaRepositoryInteractor(CustomerJpaRepository repository, CustomerJpaMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
@@ -47,7 +46,7 @@ public class CustomerJpaRepositoryAdapter implements CustomerRepository {
     public List<CustomerEntity> findAll() {
         return repository.findAll().stream()
                 .map(mapper::toEntity)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -65,5 +64,15 @@ public class CustomerJpaRepositoryAdapter implements CustomerRepository {
     @Override
     public boolean existsByIdentificationNumber(String identificationNumber) {
         return repository.existsByIdentificationNumber(identificationNumber);
+    }
+
+    @Override
+    public boolean existsByPhoneNumber(String phoneNumber) {
+        return repository.existsByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
     }
 }
