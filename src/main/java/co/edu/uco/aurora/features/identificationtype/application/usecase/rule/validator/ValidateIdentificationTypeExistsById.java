@@ -1,6 +1,6 @@
-package co.edu.uco.aurora.application.usecase.rule.validator.identificationtype;
+package co.edu.uco.aurora.features.identificationtype.application.usecase.rule.validator;
 
-import co.edu.uco.aurora.application.usecase.rule.identificationtype.IdentificationTypeExistByIdRule;
+import co.edu.uco.aurora.features.identificationtype.application.usecase.rule.IdentificationTypeExistByIdRule;
 import co.edu.uco.aurora.application.usecase.rule.validator.Validator;
 
 public class ValidateIdentificationTypeExistsById implements Validator {
