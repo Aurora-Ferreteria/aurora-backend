@@ -1,4 +1,4 @@
-package co.edu.uco.aurora.application.usecase.rule.customer;
+package co.edu.uco.aurora.features.customer.application.usecase.rule;
 
 import co.edu.uco.aurora.application.usecase.rule.Rule;
 import co.edu.uco.aurora.crosscutting.exception.AuroraException;
@@ -7,7 +7,7 @@ import co.edu.uco.aurora.crosscutting.helper.TextHelper;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 import co.edu.uco.aurora.infrastructure.persistence.repository.CustomerRepository;
 
-public class CustomerIdentificationNumberDoesNotExistRule implements Rule {
+public final class CustomerIdentificationNumberDoesNotExistRule implements Rule {
 
     private static final Rule instance = new CustomerIdentificationNumberDoesNotExistRule();
 
