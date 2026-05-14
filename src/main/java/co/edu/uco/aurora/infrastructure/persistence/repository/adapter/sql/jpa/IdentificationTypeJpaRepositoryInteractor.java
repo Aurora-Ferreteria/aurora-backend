@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public class IdentificationTypeJpaRepositoryAdapter implements IdentificationTypeRepository {
+public class IdentificationTypeJpaRepositoryInteractor implements IdentificationTypeRepository {
 
     private final IdentificationTypeJpaRepository repository;
     private final IdentificationTypeJpaMapper mapper;
 
-    public IdentificationTypeJpaRepositoryAdapter(IdentificationTypeJpaRepository repository, IdentificationTypeJpaMapper mapper) {
+    public IdentificationTypeJpaRepositoryInteractor(IdentificationTypeJpaRepository repository, IdentificationTypeJpaMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }

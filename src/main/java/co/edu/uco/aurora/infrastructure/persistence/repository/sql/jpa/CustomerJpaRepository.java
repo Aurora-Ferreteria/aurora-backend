@@ -9,5 +9,8 @@ public interface CustomerJpaRepository extends JpaRepository<CustomerJpaEntity, 
 
     boolean existsByIdentificationNumber(String identificationNumber);
 
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    boolean existsByEmail(String email);
 }
 

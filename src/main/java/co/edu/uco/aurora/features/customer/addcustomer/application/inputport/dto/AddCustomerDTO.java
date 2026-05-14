@@ -10,20 +10,24 @@ public final class AddCustomerDTO {
     private String phoneNumber;
     private String email;
 
+    public AddCustomerDTO() {
+        super();
+    }
+
     public AddCustomerDTO(UUID identificationType, String identificationNumber, String fullName, String phoneNumber, String email) {
         super();
-        setIdentificationType(identificationType);
-        setIdentificationNumber(identificationNumber);
-        setFullName(fullName);
-        setPhoneNumber(phoneNumber);
-        setEmail(email);
+        this.identificationType = identificationType;
+        this.identificationNumber = identificationNumber;
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
     }
 
     public UUID getIdentificationType() {
         return identificationType;
     }
 
-    private void setIdentificationType(UUID identificationType) {
+    public void setIdentificationType(UUID identificationType) {
         this.identificationType = identificationType;
     }
 
@@ -31,7 +35,7 @@ public final class AddCustomerDTO {
         return identificationNumber;
     }
 
-    private void setIdentificationNumber(String identificationNumber) {
+    public void setIdentificationNumber(String identificationNumber) {
         this.identificationNumber = identificationNumber;
     }
 
@@ -39,7 +43,7 @@ public final class AddCustomerDTO {
         return fullName;
     }
 
-    private void setFullName(String fullName) {
+    public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
@@ -47,7 +51,7 @@ public final class AddCustomerDTO {
         return phoneNumber;
     }
 
-    private void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -55,7 +59,7 @@ public final class AddCustomerDTO {
         return email;
     }
 
-    private void setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 }

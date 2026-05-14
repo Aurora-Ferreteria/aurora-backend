@@ -21,4 +21,8 @@ public interface CustomerRepository {
 
     boolean existsByIdentificationNumber(String identificationNumber);
 
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    boolean existsByEmail(String email);
+
 }

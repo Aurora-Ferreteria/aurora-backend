@@ -1,5 +1,11 @@
 package co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domain;
 
+import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domain.validator.ValidateCustomerEmail;
+import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domain.validator.ValidateCustomerFullName;
+import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domain.validator.ValidateCustomerIdentificationNumber;
+import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domain.validator.ValidateCustomerIdentificationType;
+import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domain.validator.ValidateCustomerPhoneNumber;
+
 import java.util.UUID;
 
 public final class AddCustomerDomain {
@@ -10,7 +16,8 @@ public final class AddCustomerDomain {
     private String phoneNumber;
     private String email;
 
-    public AddCustomerDomain(UUID identificationType, String identificationNumber, String fullName, String phoneNumber, String email) {
+    public AddCustomerDomain(UUID identificationType, String identificationNumber, String fullName,
+                             String phoneNumber, String email) {
         super();
         setIdentificationType(identificationType);
         setIdentificationNumber(identificationNumber);
@@ -24,7 +31,7 @@ public final class AddCustomerDomain {
     }
 
     private void setIdentificationType(UUID identificationType) {
-        this.identificationType = identificationType;
+        this.identificationType = ValidateCustomerIdentificationType.executeValidation(identificationType);
     }
 
     public String getIdentificationNumber() {
@@ -32,7 +39,7 @@ public final class AddCustomerDomain {
     }
 
     private void setIdentificationNumber(String identificationNumber) {
-        this.identificationNumber = identificationNumber;
+        this.identificationNumber = ValidateCustomerIdentificationNumber.executeValidation(identificationNumber);
     }
 
     public String getFullName() {
@@ -40,7 +47,7 @@ public final class AddCustomerDomain {
     }
 
     private void setFullName(String fullName) {
-        this.fullName = fullName;
+        this.fullName = ValidateCustomerFullName.executeValidation(fullName);
     }
 
     public String getPhoneNumber() {
@@ -48,7 +55,7 @@ public final class AddCustomerDomain {
     }
 
     private void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = ValidateCustomerPhoneNumber.executeValidation(phoneNumber);
     }
 
     public String getEmail() {
@@ -56,7 +63,6 @@ public final class AddCustomerDomain {
     }
 
     private void setEmail(String email) {
-        this.email = email;
+        this.email = ValidateCustomerEmail.executeValidation(email);
     }
-
 }
