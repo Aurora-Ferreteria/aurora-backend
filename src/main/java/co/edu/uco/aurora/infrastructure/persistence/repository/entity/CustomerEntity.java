@@ -5,7 +5,7 @@ import java.util.UUID;
 public class CustomerEntity {
 
     private UUID id;
-    private IdentificationTypeEntity identifycationType;
+    private IdentificationTypeEntity identificationType;
     private String identificationNumber;
     private String fullName;
     private String phoneNumber;
@@ -15,11 +15,11 @@ public class CustomerEntity {
         super();
     }
 
-    public CustomerEntity(UUID id, IdentificationTypeEntity identifycationType, String identificationNumber,
+    public CustomerEntity(UUID id, IdentificationTypeEntity identificationType, String identificationNumber,
                           String fullName, String phoneNumber, String email) {
         super();
         setId(id);
-        setIdentifycationType(identifycationType);
+        setIdentificationType(identificationType);
         setIdentificationNumber(identificationNumber);
         setFullName(fullName);
         setPhoneNumber(phoneNumber);
@@ -34,12 +34,12 @@ public class CustomerEntity {
         this.id = id;
     }
 
-    public IdentificationTypeEntity getIdentifycationType() {
-        return identifycationType;
+    public IdentificationTypeEntity getIdentificationType() {
+        return identificationType;
     }
 
-    public void setIdentifycationType(IdentificationTypeEntity identifycationType) {
-        this.identifycationType = identifycationType;
+    public void setIdentificationType(IdentificationTypeEntity identificationType) {
+        this.identificationType = identificationType;
     }
 
     public String getIdentificationNumber() {

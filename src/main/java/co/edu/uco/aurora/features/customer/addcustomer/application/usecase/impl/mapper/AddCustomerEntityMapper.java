@@ -14,11 +14,11 @@ public interface AddCustomerEntityMapper extends EntityMapper<CustomerEntity, Ad
 
     @Override
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "identifycationType", source = "identificationType")
+    @Mapping(target = "identificationType", source = "identificationType")
     CustomerEntity toEntity(AddCustomerDomain domain);
 
     @Override
-    @Mapping(target = "identificationType", source = "identifycationType")
+    @Mapping(target = "identificationType", source = "identificationType")
     AddCustomerDomain toDomain(CustomerEntity entity);
 
     default IdentificationTypeEntity map(UUID id) {
