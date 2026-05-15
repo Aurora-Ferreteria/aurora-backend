@@ -1,7 +1,7 @@
-package co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.mapper.customer;
+package co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.mapper;
 
 import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domain.AddCustomerDomain;
-import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.mapper.EntityMapper;
+import co.edu.uco.aurora.application.usecase.impl.mapper.EntityMapper;
 import co.edu.uco.aurora.infrastructure.persistence.repository.entity.CustomerEntity;
 import co.edu.uco.aurora.infrastructure.persistence.repository.entity.IdentificationTypeEntity;
 import org.mapstruct.Mapper;
@@ -14,11 +14,11 @@ public interface AddCustomerEntityMapper extends EntityMapper<CustomerEntity, Ad
 
     @Override
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "identifycationType", source = "identificationType")
+    @Mapping(target = "identificationType", source = "identificationType")
     CustomerEntity toEntity(AddCustomerDomain domain);
 
     @Override
-    @Mapping(target = "identificationType", source = "identifycationType")
+    @Mapping(target = "identificationType", source = "identificationType")
     AddCustomerDomain toDomain(CustomerEntity entity);
 
     default IdentificationTypeEntity map(UUID id) {

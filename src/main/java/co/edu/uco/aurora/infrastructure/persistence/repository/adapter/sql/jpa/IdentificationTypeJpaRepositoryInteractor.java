@@ -1,7 +1,7 @@
 package co.edu.uco.aurora.infrastructure.persistence.repository.adapter.sql.jpa;
 
 import co.edu.uco.aurora.infrastructure.persistence.repository.IdentificationTypeRepository;
-import co.edu.uco.aurora.infrastructure.persistence.repository.adapter.sql.jpa.mapper.identificationTypeJpaMapper.IdentificationTypeJpaMapper;
+import co.edu.uco.aurora.infrastructure.persistence.repository.adapter.sql.jpa.mapper.identificationtype.IdentificationTypeJpaMapper;
 import co.edu.uco.aurora.infrastructure.persistence.repository.entity.IdentificationTypeEntity;
 import co.edu.uco.aurora.infrastructure.persistence.repository.sql.jpa.IdentificationTypeJpaRepository;
 import org.springframework.stereotype.Repository;
@@ -22,7 +22,9 @@ public class IdentificationTypeJpaRepositoryInteractor implements Identification
 
     @Override
     public List<IdentificationTypeEntity> findAll() {
-        return List.of();
+        return repository.findAll().stream()
+                .map(mapper::toEntity)
+                .toList();
     }
 
     @Override

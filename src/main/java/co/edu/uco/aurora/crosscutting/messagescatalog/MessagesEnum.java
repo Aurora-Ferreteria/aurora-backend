@@ -128,6 +128,31 @@ public enum MessagesEnum {
     CUSTOMERS_UNEXPECTED_ERROR(
             "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
             "Ocurrió un error inesperado al intentar registrar el nuevo cliente. Por favor, contacte al administrador del sistema."
+    ),
+
+
+    // =================================================================================
+    // MENSAJES PARA EL CONTROLADOR: FindCustomerController
+    // =================================================================================
+    FIND_CUSTOMER_SUCCESS(
+            "Operación realizada con éxito.",
+            "Los clientes han sido consultados exitosamente en el sistema."
+    ),
+    FIND_CUSTOMER_ERROR(
+            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
+            "Ocurrió un error inesperado al intentar consultar la lista de clientes. Por favor, inténtelo de nuevo más tarde."
+    ),
+
+    // =================================================================================
+    // MENSAJES PARA EL CONTROLADOR: FindIdentificationTypeController
+    // =================================================================================
+    FIND_IDENTIFICATION_TYPE_SUCCESS(
+            "Operación realizada con éxito.",
+                    "Los tipos de identificación han sido consultados exitosamente en el sistema."
+    ),
+    FIND_IDENTIFICATION_TYPE_ERROR(
+            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
+                    "Ocurrió un error inesperado al intentar consultar la lista de tipos de identificación. Por favor, inténtelo de nuevo más tarde."
     );
 
     private final String title;
