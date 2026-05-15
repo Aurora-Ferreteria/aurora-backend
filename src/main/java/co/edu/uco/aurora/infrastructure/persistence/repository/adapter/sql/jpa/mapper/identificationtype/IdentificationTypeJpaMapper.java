@@ -1,4 +1,4 @@
-package co.edu.uco.aurora.infrastructure.persistence.repository.adapter.sql.jpa.mapper.identificationTypeJpaMapper;
+package co.edu.uco.aurora.infrastructure.persistence.repository.adapter.sql.jpa.mapper.identificationtype;
 
 import co.edu.uco.aurora.infrastructure.persistence.repository.adapter.sql.jpa.mapper.JPAMapper;
 import co.edu.uco.aurora.infrastructure.persistence.repository.entity.IdentificationTypeEntity;

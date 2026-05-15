@@ -1,4 +1,4 @@
-package co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.mapper;
+package co.edu.uco.aurora.application.usecase.impl.mapper;
 
 public interface EntityMapper <E, D>{
 

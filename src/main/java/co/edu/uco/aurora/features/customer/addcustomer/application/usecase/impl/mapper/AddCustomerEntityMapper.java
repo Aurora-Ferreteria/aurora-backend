@@ -1,7 +1,7 @@
-package co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.mapper.customer;
+package co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.mapper;
 
 import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domain.AddCustomerDomain;
-import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.mapper.EntityMapper;
+import co.edu.uco.aurora.application.usecase.impl.mapper.EntityMapper;
 import co.edu.uco.aurora.infrastructure.persistence.repository.entity.CustomerEntity;
 import co.edu.uco.aurora.infrastructure.persistence.repository.entity.IdentificationTypeEntity;
 import org.mapstruct.Mapper;

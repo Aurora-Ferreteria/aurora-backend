@@ -2,8 +2,8 @@ package co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl
 
 import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.AddCustomerUseCase;
 import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domain.AddCustomerDomain;
-import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.mapper.customer.AddCustomerEntityMapper;
 
+import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.mapper.AddCustomerEntityMapper;
 import co.edu.uco.aurora.features.customer.application.usecase.rule.validator.ValidateCustomerEmailDoesNotExist;
 import co.edu.uco.aurora.features.customer.application.usecase.rule.validator.ValidateCustomerIdentificationNumberDoesNotExist;
 import co.edu.uco.aurora.features.customer.application.usecase.rule.validator.ValidateCustomerPhoneNumberDoesNotExist;
