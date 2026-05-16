@@ -27,8 +27,11 @@ WORKDIR /app
 # Copiamos SOLO el archivo .jar generado en la etapa anterior
 COPY --from=build /app/target/*.jar app.jar
 
+# Copiamos la carpeta local 'newrelic' al contenedor para que el agente exista en la ejecución
+COPY newrelic/ newrelic/
+
 # Exponemos el puerto que usa Spring Boot
 EXPOSE 8080
 
-# Comando para encender la aplicación
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Un solo ENTRYPOINT optimizado con límite de memoria (300MB) y el agente APM
+ENTRYPOINT ["java", "-Xmx300m", "-javaagent:newrelic/newrelic.jar", "-jar", "app.jar"]
