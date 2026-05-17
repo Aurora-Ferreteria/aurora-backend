@@ -2,14 +2,10 @@ package co.edu.uco.aurora.initializer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
-import org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 
-
-@SpringBootApplication(exclude = {
-		SecurityAutoConfiguration.class,
-		UserDetailsServiceAutoConfiguration.class
-})
+@SpringBootApplication // Quitamos los excludes para que Spring Security funcione con todo su poder nativo
+@ComponentScan(basePackages = "co.edu.uco.aurora") // Obligamos a Spring a escanear TODOS los paquetes del proyecto
 public class AuroraApplication {
 
 	public static void main(String[] args) {
