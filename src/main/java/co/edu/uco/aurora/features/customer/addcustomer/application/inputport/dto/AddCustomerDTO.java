@@ -1,5 +1,8 @@
 package co.edu.uco.aurora.features.customer.addcustomer.application.inputport.dto;
 
+import co.edu.uco.aurora.crosscutting.helper.TextHelper;
+import co.edu.uco.aurora.crosscutting.helper.UUIDHelper;
+
 import java.util.UUID;
 
 public final class AddCustomerDTO {
@@ -28,7 +31,7 @@ public final class AddCustomerDTO {
     }
 
     public void setIdentificationType(UUID identificationType) {
-        this.identificationType = identificationType;
+        this.identificationType = UUIDHelper.getDefault(identificationType);
     }
 
     public String getIdentificationNumber() {
@@ -36,7 +39,7 @@ public final class AddCustomerDTO {
     }
 
     public void setIdentificationNumber(String identificationNumber) {
-        this.identificationNumber = identificationNumber;
+        this.identificationNumber = TextHelper.getDefaultWithTrim(identificationNumber);
     }
 
     public String getFullName() {
@@ -44,7 +47,7 @@ public final class AddCustomerDTO {
     }
 
     public void setFullName(String fullName) {
-        this.fullName = fullName;
+        this.fullName = TextHelper.getDefaultWithTrim(fullName);
     }
 
     public String getPhoneNumber() {
@@ -52,7 +55,7 @@ public final class AddCustomerDTO {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = TextHelper.getDefaultWithTrim(phoneNumber);
     }
 
     public String getEmail() {
@@ -60,6 +63,6 @@ public final class AddCustomerDTO {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = TextHelper.getDefaultWithTrim(email);
     }
 }

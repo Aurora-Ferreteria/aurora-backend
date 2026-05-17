@@ -5,6 +5,11 @@ import java.util.regex.Pattern;
 
 public final class TextHelper {
 
+    public static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+    public static final String PHONE_REGEX = "^\\+?\\d{7,20}$";
+    public static final String NAME_REGEX = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{3,100}$";
+    public static final String ID_NUMBER_REGEX = "^[0-9]+$";
+
     private static final String EMPTY = "";
 
     private TextHelper() {
@@ -30,38 +35,11 @@ public final class TextHelper {
         return EMPTY.equals(getDefaultWithTrim(value));
     }
 
-    public static boolean isValidPhoneNumber(final String value) {
-        final var phone = getDefaultWithTrim(value);
-        return !isEmpty(phone) && phone.matches("^\\+?\\d{7,20}$");
-    }
-
-    public static boolean isValidEmail(final String value) {
-        final var email = getDefaultWithTrim(value);
-        return !isEmpty(email) && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
-    }
-
-    public static boolean isValidString(final String value) {
-        final var string = getDefaultWithTrim(value);
-        return !isEmpty(string) && string.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+$");
-    }
-
     public static boolean lengthIsValid(final String value, final int min, final int max, final boolean mustApplyTrim) {
         var length = (mustApplyTrim
                 ? getDefaultWithTrim(value)
                 : getDefault(value)).length();
         return length >= min && length <= max;
-    }
-
-    public static boolean lengthIsValidWithTrim(final String value, final int min, final int max) {
-        return lengthIsValid(getDefaultWithTrim(value), min, max, true);
-    }
-
-    public static boolean formatIsValid(final String value, final String pattern, final boolean mustApplyTrim) {
-        var text = (mustApplyTrim
-                ? getDefaultWithTrim(value)
-                :getDefault(value));
-
-        return text.matches(pattern);
     }
 
     public static boolean matchesRegex(final String text, final String regex) {
