@@ -19,12 +19,7 @@ jobs:
 
       # Tu script impecable con reintentos para la red
       - name: Install Doppler CLI
-        run: |
-          for i in {1..3}; do
-            curl -sSfL https://cli.doppler.com/install.sh | sh && break || echo "Attempt $i failed, retrying..."
-            sleep 5
-          done
-
+        uses: dopplerhq/cli-action@v3
       # ¡NO OLVIDES ESTE PASO AL FINAL!
       - name: Build and Test
         run: doppler run -- ./mvnw clean install

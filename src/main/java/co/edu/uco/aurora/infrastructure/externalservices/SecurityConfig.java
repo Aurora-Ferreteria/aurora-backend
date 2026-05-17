@@ -27,7 +27,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // CORRECCIÓN DEL FILTRO DE ZUPLO
                 .addFilterBefore((request, response, chain) -> {
                     var req = (jakarta.servlet.http.HttpServletRequest) request;
                     var res = (jakarta.servlet.http.HttpServletResponse) response;
@@ -38,16 +37,11 @@ public class SecurityConfig {
                         res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         res.setContentType("application/json");
                         res.getWriter().write("{\"error\": \"Secreto de Zuplo invalido\"}");
-                        return; // Detiene la ejecución aquí si falla
+                        return;
                     }
-
                     chain.doFilter(request, response);
-                    return; // ¡CRUCIAL! Asegura que el hilo termine limpiamente y no duplique procesamiento
                 }, UsernamePasswordAuthenticationFilter.class)
-
                 .authorizeHttpRequests(authorize -> authorize
-                        // Permitimos explícitamente la ruta de tipos de identificación para que no pida token
-                        .requestMatchers("/api/v1/identification-types").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -62,7 +56,6 @@ public class SecurityConfig {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
-        // Asegúrate de que en las reglas de Auth0 tu "Custom Claim" de roles se llame exactamente así
         converter.setAuthoritiesClaimName("https://apiaurora/roles");
         converter.setAuthorityPrefix("ROLE_");
 
