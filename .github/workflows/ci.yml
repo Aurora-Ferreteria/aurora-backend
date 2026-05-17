@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Install Doppler CLI
-        uses: dopplerhq/cli-action@v1
+        uses: dopplerhq/cli-action@v3
 
       - name: Build and Test
         run: doppler run -- ./mvnw clean install
