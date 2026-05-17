@@ -17,10 +17,16 @@ jobs:
           java-version: '26'
           distribution: 'temurin'
 
+      # Tu script impecable con reintentos para la red
       - name: Install Doppler CLI
-        uses: dopplerhq/cli-action@v1
+        run: |
+          for i in {1..3}; do
+            curl -sSfL https://cli.doppler.com/install.sh | sh && break || echo "Attempt $i failed, retrying..."
+            sleep 5
+          done
 
+      # ¡NO OLVIDES ESTE PASO AL FINAL!
       - name: Build and Test
         run: doppler run -- ./mvnw clean install
         env:
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}+
