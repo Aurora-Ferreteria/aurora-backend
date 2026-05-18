@@ -5,6 +5,8 @@ import co.edu.uco.aurora.infrastructure.persistence.repository.adapter.sql.jpa.m
 import co.edu.uco.aurora.infrastructure.persistence.repository.entity.CustomerEntity;
 import co.edu.uco.aurora.infrastructure.persistence.repository.sql.jpa.CustomerJpaRepository;
 import co.edu.uco.aurora.infrastructure.persistence.repository.sql.jpa.entity.CustomerJpaEntity;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,6 +24,7 @@ public class CustomerJpaRepositoryInteractor implements CustomerRepository {
     }
 
     @Override
+    @CacheEvict(value = "customers", allEntries = true)
     public void create(CustomerEntity entity) {
         // CustomerEntity -> CustomerJPAEntity (MAPPER)
         CustomerJpaEntity jpaEntity = mapper.toJPAEntity(entity);
@@ -30,6 +33,7 @@ public class CustomerJpaRepositoryInteractor implements CustomerRepository {
     }
 
     @Override
+    @CacheEvict(value = {"customers", "customer"}, allEntries = true)
     public void update(UUID id, CustomerEntity entity) {
         // CustomerEntity -> CustomerJPAEntity (MAPPER)
         CustomerJpaEntity jpaEntity = mapper.toJPAEntity(entity);
@@ -38,11 +42,13 @@ public class CustomerJpaRepositoryInteractor implements CustomerRepository {
     }
 
     @Override
+    @CacheEvict(value = {"customers", "customer"}, allEntries = true)
     public void delete(UUID id) {
         repository.deleteById(id);
     }
 
     @Override
+    @Cacheable(value = "customers")
     public List<CustomerEntity> findAll() {
         return repository.findAll().stream()
                 .map(mapper::toEntity)
@@ -55,6 +61,7 @@ public class CustomerJpaRepositoryInteractor implements CustomerRepository {
     }
 
     @Override
+    @Cacheable(value = "customer", key = "#id")
     public CustomerEntity findById(UUID id) {
         return repository.findById(id)
                 .map(mapper::toEntity)

@@ -1,0 +1,23 @@
+name: OWASP ZAP Security Scan
+
+on:
+  # Se ejecuta manualmente desde GitHub o cuando haces push a main
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: Escaneo de vulnerabilidades
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Ejecutar OWASP ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.12.0
+        with:
+          # URL pública de tu backend en Render
+          target: 'https://aurora-backend-bqn9.onrender.com'
+          # Mantenemos fail_action en false para que no bloquee el pipeline si encuentra advertencias menores
+          fail_action: false

@@ -9,9 +9,9 @@ public interface IdentificationTypeRepository {
 
     List<IdentificationTypeEntity> findAll();
 
-    IdentificationTypeEntity findById(IdentificationTypeEntity filter);
+    IdentificationTypeEntity findByFilter(IdentificationTypeEntity filter);
 
-    IdentificationTypeEntity findById(UUID id);
+    IdentificationTypeEntity findByFilter(UUID id);
 
     boolean existsById(UUID id);
 
