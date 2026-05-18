@@ -4,6 +4,7 @@ import co.edu.uco.aurora.infrastructure.persistence.repository.IdentificationTyp
 import co.edu.uco.aurora.infrastructure.persistence.repository.adapter.sql.jpa.mapper.identificationtype.IdentificationTypeJpaMapper;
 import co.edu.uco.aurora.infrastructure.persistence.repository.entity.IdentificationTypeEntity;
 import co.edu.uco.aurora.infrastructure.persistence.repository.sql.jpa.IdentificationTypeJpaRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +21,9 @@ public class IdentificationTypeJpaRepositoryInteractor implements Identification
         this.mapper = mapper;
     }
 
+
     @Override
+    @Cacheable(value = "identificationTypes")
     public List<IdentificationTypeEntity> findAll() {
         return repository.findAll().stream()
                 .map(mapper::toEntity)
@@ -28,12 +31,12 @@ public class IdentificationTypeJpaRepositoryInteractor implements Identification
     }
 
     @Override
-    public IdentificationTypeEntity findById(IdentificationTypeEntity filter) {
+    public IdentificationTypeEntity findByFilter(IdentificationTypeEntity filter) {
         return null;
     }
 
     @Override
-    public IdentificationTypeEntity findById(UUID id) {
+    public IdentificationTypeEntity findByFilter(UUID id) {
         return null;
     }
 

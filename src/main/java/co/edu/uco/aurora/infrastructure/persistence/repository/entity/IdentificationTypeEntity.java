@@ -1,8 +1,9 @@
 package co.edu.uco.aurora.infrastructure.persistence.repository.entity;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class IdentificationTypeEntity {
+public class IdentificationTypeEntity implements Serializable {
 
     private UUID id;
     private String name;
