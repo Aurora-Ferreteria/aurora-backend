@@ -18,7 +18,7 @@ jobs:
         with:
           target: 'https://aurora-backend-bqn9.onrender.com'
           token: ${{ secrets.GITHUB_TOKEN }}
-          create_issue: false
+          allow_issue_writing: false
           fail_action: false
 
       - name: Subir Reporte de Vulnerabilidades
@@ -26,4 +26,4 @@ jobs:
         if: always()
         with:
           name: zap-security-report
-          path: zap_report.html
+          path: report_html.html
