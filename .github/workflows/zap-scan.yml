@@ -18,6 +18,7 @@ jobs:
         with:
           target: 'https://aurora-backend-bqn9.onrender.com'
           token: ${{ secrets.GITHUB_TOKEN }}
+          create_issue: false
           fail_action: false
 
       - name: Subir Reporte de Vulnerabilidades
