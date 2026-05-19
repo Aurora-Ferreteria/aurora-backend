@@ -1,4 +1,4 @@
-package co.edu.uco.aurora.features.customer.application.usecase.rule;
+package co.edu.uco.aurora.features.customer.rule;
 
 import co.edu.uco.aurora.application.usecase.rule.Rule;
 import co.edu.uco.aurora.crosscutting.exception.AuroraException;

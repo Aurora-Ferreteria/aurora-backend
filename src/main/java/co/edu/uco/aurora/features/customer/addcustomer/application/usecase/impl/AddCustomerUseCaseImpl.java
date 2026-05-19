@@ -4,10 +4,10 @@ import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.AddCu
 import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domain.AddCustomerDomain;
 
 import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.mapper.AddCustomerEntityMapper;
-import co.edu.uco.aurora.features.customer.application.usecase.rule.validator.ValidateCustomerEmailDoesNotExist;
-import co.edu.uco.aurora.features.customer.application.usecase.rule.validator.ValidateCustomerIdentificationNumberDoesNotExist;
-import co.edu.uco.aurora.features.customer.application.usecase.rule.validator.ValidateCustomerPhoneNumberDoesNotExist;
-import co.edu.uco.aurora.features.identificationtype.application.usecase.rule.validator.ValidateIdentificationTypeExistsById;
+import co.edu.uco.aurora.features.customer.rule.validator.ValidateCustomerEmailDoesNotExist;
+import co.edu.uco.aurora.features.customer.rule.validator.ValidateCustomerIdentificationNumberDoesNotExist;
+import co.edu.uco.aurora.features.customer.rule.validator.ValidateCustomerPhoneNumberDoesNotExist;
+import co.edu.uco.aurora.features.identificationtype.rule.validator.ValidateIdentificationTypeExistsById;
 
 import co.edu.uco.aurora.infrastructure.persistence.repository.CustomerRepository;
 import co.edu.uco.aurora.infrastructure.persistence.repository.IdentificationTypeRepository;

@@ -1,7 +1,7 @@
-package co.edu.uco.aurora.features.customer.application.usecase.rule.validator;
+package co.edu.uco.aurora.features.customer.rule.validator;
 
 import co.edu.uco.aurora.application.usecase.rule.validator.Validator;
-import co.edu.uco.aurora.features.customer.application.usecase.rule.CustomerIdentificationNumberDoesNotExistRule;
+import co.edu.uco.aurora.features.customer.rule.CustomerIdentificationNumberDoesNotExistRule;
 
 public final class ValidateCustomerIdentificationNumberDoesNotExist implements Validator {
 
