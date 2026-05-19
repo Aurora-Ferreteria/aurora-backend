@@ -4,6 +4,7 @@ import co.edu.uco.aurora.application.usecase.rule.generics.StringFormatValueIsVa
 import co.edu.uco.aurora.application.usecase.rule.generics.StringLengthValuesIsValidRule;
 import co.edu.uco.aurora.application.usecase.rule.generics.StringValuesIsPresentRule;
 import co.edu.uco.aurora.crosscutting.helper.TextHelper;
+import org.springframework.web.util.HtmlUtils;
 
 public final class ValidateCustomerEmail {
 
@@ -13,7 +14,10 @@ public final class ValidateCustomerEmail {
     }
 
     public static String executeValidation(String email) {
-        String sanitizedEmail = TextHelper.getDefaultWithTrim(email).replaceAll("\\s+", "");
+
+        String unescapedEmail = HtmlUtils.htmlUnescape(email);
+
+        String sanitizedEmail = TextHelper.getDefaultWithTrim(unescapedEmail).replaceAll("\\s+", "");
 
         StringValuesIsPresentRule.executeRule(sanitizedEmail, FIELD_NAME, true);
         StringLengthValuesIsValidRule.executeRule(sanitizedEmail, FIELD_NAME, 5, 150, true);
