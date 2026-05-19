@@ -43,6 +43,8 @@ public class SecurityConfig {
                 }, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/public/**").permitAll()
+                        // AGREGAMOS TU RUTA AQUÍ PARA QUE SEA PÚBLICA TEMPORALMENTE
+                        .requestMatchers("/api/v1/identification-types").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2

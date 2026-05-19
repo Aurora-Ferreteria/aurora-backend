@@ -30,7 +30,7 @@ public class IdentificationTypeEntity implements Serializable {
         return name;
     }
 
-    private void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 }

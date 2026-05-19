@@ -32,7 +32,7 @@ public class IdentificationTypeJpaEntity {
         return id;
     }
 
-    private void setId(UUID id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -40,7 +40,7 @@ public class IdentificationTypeJpaEntity {
         return name;
     }
 
-    private void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
