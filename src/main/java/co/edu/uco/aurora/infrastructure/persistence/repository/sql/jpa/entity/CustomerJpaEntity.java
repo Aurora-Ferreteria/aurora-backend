@@ -60,7 +60,7 @@ public class CustomerJpaEntity {
         return identificationType;
     }
 
-     void setIdentificationType(IdentificationTypeJpaEntity identificationType) {
+    public void setIdentificationType(IdentificationTypeJpaEntity identificationType) {
         this.identificationType = identificationType;
     }
 

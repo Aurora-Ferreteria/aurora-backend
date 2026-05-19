@@ -8,4 +8,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = { IdentificationTypeJpaMapper.class })
 public interface CustomerJpaMapper extends JPAMapper <CustomerEntity, CustomerJpaEntity> {
+
 }

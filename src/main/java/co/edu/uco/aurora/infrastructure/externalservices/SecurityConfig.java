@@ -22,6 +22,7 @@ public class SecurityConfig {
     private String zuploSecret;
 
     @Bean
+    @SuppressWarnings({"java:S112", "java:S1130"})
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
@@ -58,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
-        converter.setAuthoritiesClaimName("https://apiaurora/roles");
+        converter.setAuthoritiesClaimName("permissions");
         converter.setAuthorityPrefix("ROLE_");
 
         JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
