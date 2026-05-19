@@ -1,9 +1,9 @@
-package co.edu.uco.aurora.features.customer.addcustomer.application.inputport.impl;
+package co.edu.uco.aurora.features.customer.addcustomer.application.inputport.interactor;
 
 import co.edu.uco.aurora.crosscutting.sanitizer.TextSanitizer;
 import co.edu.uco.aurora.features.customer.addcustomer.application.inputport.AddCustomerInputPort;
 import co.edu.uco.aurora.features.customer.addcustomer.application.inputport.dto.AddCustomerDTO;
-import co.edu.uco.aurora.features.customer.addcustomer.application.inputport.impl.mapper.AddCustomerDTOMapper;
+import co.edu.uco.aurora.features.customer.addcustomer.application.inputport.interactor.mapper.AddCustomerDTOMapper;
 import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.AddCustomerUseCase;
 import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.domain.AddCustomerDomain;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package co.edu.uco.aurora.features.customer.addcustomer.application.inputport.impl.mapper;
+package co.edu.uco.aurora.features.customer.addcustomer.application.inputport.interactor.mapper;
 
 import co.edu.uco.aurora.features.customer.addcustomer.application.inputport.dto.AddCustomerDTO;
 import co.edu.uco.aurora.application.inputport.impl.mapper.DTOMapper;
