@@ -19,7 +19,7 @@ public class CustomerJpaEntity {
 
     @ManyToOne
     @JoinColumn(name = "TipoIdentificacion")
-    private IdentificationTypeJpaEntity identifycationType;
+    private IdentificationTypeJpaEntity identificationType;
 
     @Column(name = "NumeroIdentificacion")
     private String identificationNumber;
@@ -41,7 +41,7 @@ public class CustomerJpaEntity {
                              String fullName, String phoneNumber, String email) {
         super();
         setId(id);
-        setIdentifycationType(identifycationType);
+        setIdentificationType(identifycationType);
         setIdentificationNumber(identificationNumber);
         setFullName(fullName);
         setPhoneNumber(phoneNumber);
@@ -56,19 +56,19 @@ public class CustomerJpaEntity {
         this.id = id;
     }
 
-    public IdentificationTypeJpaEntity getIdentifycationType() {
-        return identifycationType;
+    public IdentificationTypeJpaEntity getIdentificationType() {
+        return identificationType;
     }
 
-    private void setIdentifycationType(IdentificationTypeJpaEntity identifycationType) {
-        this.identifycationType = identifycationType;
+     void setIdentificationType(IdentificationTypeJpaEntity identificationType) {
+        this.identificationType = identificationType;
     }
 
     public String getIdentificationNumber() {
         return identificationNumber;
     }
 
-    private void setIdentificationNumber(String identificationNumber) {
+    public void setIdentificationNumber(String identificationNumber) {
         this.identificationNumber = identificationNumber;
     }
 
@@ -76,7 +76,7 @@ public class CustomerJpaEntity {
         return fullName;
     }
 
-    private void setFullName(String fullName) {
+    public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
@@ -84,7 +84,7 @@ public class CustomerJpaEntity {
         return phoneNumber;
     }
 
-    private void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -92,7 +92,7 @@ public class CustomerJpaEntity {
         return email;
     }
 
-    private void setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 }

@@ -47,7 +47,7 @@ public class CustomerEntity implements Serializable {
         return identificationNumber;
     }
 
-    private void setIdentificationNumber(String identificationNumber) {
+    public void setIdentificationNumber(String identificationNumber) {
         this.identificationNumber = identificationNumber;
     }
 
@@ -55,7 +55,7 @@ public class CustomerEntity implements Serializable {
         return fullName;
     }
 
-    private void setFullName(String fullName) {
+    public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
@@ -63,7 +63,7 @@ public class CustomerEntity implements Serializable {
         return phoneNumber;
     }
 
-    private void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -71,7 +71,7 @@ public class CustomerEntity implements Serializable {
         return email;
     }
 
-    private void setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 }
