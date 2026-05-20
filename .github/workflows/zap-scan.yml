@@ -13,6 +13,18 @@ jobs:
       - name: Checkout del código
         uses: actions/checkout@v4
 
+      # --- NUEVO PASO: ESPERAR A QUE RENDER DESPIERTE ---
+      - name: 💓 Esperar a que la aplicación esté lista (Healthcheck)
+        run: |
+          echo "Iniciando validación de disponibilidad en Render..."
+          # Intentará conectar cada 10 segundos. Tiempo máximo de espera: 5 minutos (300s).
+          timeout 150 bash -c '
+          while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://aurora-backend-bqn9.onrender.com)" != "200" ]]; do 
+            echo "Esperando a que la aplicación en Render responda (Cold Start)..."
+            sleep 10
+          done' || (echo "Error: La aplicación no subió a tiempo." && exit 1)
+          echo "¡Aplicación detectada y funcionando! Procediendo con el escaneo..."
+
       - name: Ejecutar OWASP ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.14.0
         with:
