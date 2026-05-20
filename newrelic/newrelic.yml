@@ -156,7 +156,7 @@ common: &default_settings
     # Transaction tracer is enabled by default. Set this to false to turn it off.
     # This feature is not available to Lite accounts and is automatically disabled.
     # Default is true.
-    enabled: false
+    enabled: true
 
     # Threshold in seconds for when to collect a transaction
     # trace. When the response time of a controller action exceeds
@@ -189,7 +189,7 @@ common: &default_settings
     # Determines whether the agent will capture query plans for slow
     # SQL queries. Only supported for MySQL and PostgreSQL.
     # Default is true.
-    explain_enabled: true
+    explain_enabled: false
 
     # Threshold for query execution time below which query plans will not
     # not be captured.  Relevant only when `explain_enabled` is true.
@@ -229,12 +229,12 @@ common: &default_settings
 
     # Set to false to disable transaction events.
     # Default is true.
-    enabled: false
+    enabled: true
 
     # Events are collected up to the configured amount. Afterwards, events are sampled to
     # maintain an even distribution across the harvest cycle.
     # Default is 2000.  Setting to 0 will disable.
-    max_samples_stored: 2000
+    max_samples_stored: 500
 
   # Distributed tracing lets you see the path that a request takes through your distributed system.
   # This replaces the legacy Cross Application Tracing feature.
