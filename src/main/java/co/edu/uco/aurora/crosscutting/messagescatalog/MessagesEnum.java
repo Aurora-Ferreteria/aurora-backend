@@ -153,6 +153,16 @@ public enum MessagesEnum {
     FIND_IDENTIFICATION_TYPE_ERROR(
             "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
                     "Ocurrió un error inesperado al intentar consultar la lista de tipos de identificación. Por favor, inténtelo de nuevo más tarde."
+    ),
+
+    WELCOME_EMAIL_SENDING_ERROR(
+            "El cliente fue registrado con éxito en la base de datos, pero no se pudo enviar el correo de bienvenida.",
+                    "Ocurrió un error inesperado en el servicio externo (Resend) al intentar enviar el correo a [{0}]. Detalle técnico: {1}"
+    ),
+
+    RESEND_SERVICE_SENDING_ERROR(
+            "El cliente fue registrado, pero ocurrió un problema al intentar enviar la notificación por correo.",
+            "La librería de Resend lanzó una excepción al intentar enviar el correo. Detalles: {0}"
     );
 
     private final String title;
