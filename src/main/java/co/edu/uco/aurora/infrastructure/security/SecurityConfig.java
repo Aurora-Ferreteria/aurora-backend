@@ -1,4 +1,4 @@
-package co.edu.uco.aurora.infrastructure.externalservices;
+package co.edu.uco.aurora.infrastructure.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
