@@ -34,5 +34,5 @@ COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 
 # Un solo ENTRYPOINT optimizado con límite de memoria (300MB) y el agente APM
-# ENTRYPOINT ["java", "-Xmx300m", "-javaagent:newrelic/newrelic.jar", "-jar", "app.jar"]
-ENTRYPOINT ["java", "-Xmx300m", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx300m", "-javaagent:newrelic/newrelic.jar", "-jar", "app.jar"]
+# ENTRYPOINT ["java", "-Xmx300m", "-jar", "app.jar"]

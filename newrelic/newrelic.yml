@@ -55,7 +55,7 @@ common: &default_settings
   # The levels in increasing order of verboseness are:
   #   off, severe, warning, info, fine, finer, finest
   # Default is info.
-  log_level: info
+  log_level: off
 
   # Log all data sent to and from New Relic in plain text.
   # This setting is dynamic, so changes do not require restarting your application.
@@ -91,26 +91,21 @@ common: &default_settings
     # Provides control over all the application logging features for forwarding, local log
     # decorating, and metrics features. Set as false to disable all application logging features.
     # Default is true.
-    enabled: true
+    enabled: false
 
     # The agent will automatically forward application logs to New Relic in
     # a format that includes agent metadata for linking them to traces and errors.
     forwarding:
 
       # When true, application logs will be forwarded to New Relic. The default is true.
-      enabled: true
-
-      # Application log events are collected up to the configured amount. Afterwards,
-      # events are sampled to maintain an even distribution across the harvest cycle.
-      # Default is 10000. Setting to 0 will disable.
-      #max_samples_stored: 10000
+      enabled: false
 
     # The agent will generate metrics to indicate the number of
     # application log events occurring at each distinct log level.
     metrics:
 
       # When true, application log metrics will be reported. The default is true.
-      enabled: true
+      enabled: false
 
     # The agent will add linking metadata to each log line in your application log files.
     # This feature should only be used if you want to use a third party log forwarder, instead
@@ -142,7 +137,7 @@ common: &default_settings
   attributes:
 
     # When true, attributes will be sent to New Relic. The default is true.
-    enabled: true
+    enabled: false
 
     #A comma separated list of attribute keys whose values should
     # be sent to New Relic.
@@ -161,7 +156,7 @@ common: &default_settings
     # Transaction tracer is enabled by default. Set this to false to turn it off.
     # This feature is not available to Lite accounts and is automatically disabled.
     # Default is true.
-    enabled: true
+    enabled: false
 
     # Threshold in seconds for when to collect a transaction
     # trace. When the response time of a controller action exceeds
@@ -234,7 +229,7 @@ common: &default_settings
 
     # Set to false to disable transaction events.
     # Default is true.
-    enabled: true
+    enabled: false
 
     # Events are collected up to the configured amount. Afterwards, events are sampled to
     # maintain an even distribution across the harvest cycle.
@@ -247,7 +242,7 @@ common: &default_settings
 
     # Set to false to disable distributed tracing.
     # Default is true.
-    enabled: true
+    enabled: false
 
     # Agent versions 5.10.0+ utilize both the newrelic header and W3C Trace Context headers for distributed tracing.
     # The newrelic distributed tracing header allows interoperability with older agents that don't support W3C Trace Context headers.
@@ -264,7 +259,7 @@ common: &default_settings
 
     # Set to false to disable Span events.
     # Default is true.
-    enabled: true
+    enabled: false
 
     # Determines the number of Span events that can be captured during an agent harvest cycle.
     # Increasing the number of Span events can lead to additional agent overhead. A maximum value may be imposed server side by New Relic.
@@ -276,7 +271,7 @@ common: &default_settings
     attributes:
 
       # When true, attributes will be sent to New Relic. The default is true.
-      enabled: true
+      enabled: false
 
       # A comma separated list of attribute keys whose values should be sent to New Relic.
       #include:
@@ -305,7 +300,7 @@ common: &default_settings
 
     # Set to false to disable the thread profiler.
     # Default is true.
-    enabled: true
+    enabled: false
 
   # New Relic Real User Monitoring gives you insight into the performance real users are
   # experiencing with your website. This is accomplished by measuring the time it takes for
@@ -318,7 +313,7 @@ common: &default_settings
     # See https://docs.newrelic.com/docs/agents/java-agent/instrumentation/new-relic-browser-java-agent#manual_instrumentation
     # for instructions to add these manually to your pages.
     # Set this attribute to false to turn off this behavior.
-    auto_instrument: true
+    auto_instrument: false
 
   # Class transformer can be used to disable all agent instrumentation or specific instrumentation modules.
   # All instrumentation modules can be found here: https://github.com/newrelic/newrelic-java-agent/tree/main/instrumentation
