@@ -1,9 +1,9 @@
-package co.edu.uco.aurora.infrastructure.externalservices;
+package co.edu.uco.aurora.infrastructure.externalservices.resend;
 
 import co.edu.uco.aurora.crosscutting.exception.AuroraException;
 import co.edu.uco.aurora.crosscutting.helper.TextHelper;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
-import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.WelcomeEmailSender;
+import co.edu.uco.aurora.application.usecase.WelcomeEmailSender;
 import com.resend.Resend;
 import com.resend.services.emails.model.CreateEmailOptions;
 import com.resend.services.emails.model.CreateEmailResponse;

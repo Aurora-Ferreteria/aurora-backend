@@ -1,11 +1,13 @@
 package co.edu.uco.aurora.features.customer.findcustomer.application.inputport.dto;
 
+import co.edu.uco.aurora.features.identificationtype.findidentificationtype.application.inputport.dto.FindIdentificationTypeDTO;
+
 import java.util.UUID;
 
 public final class FindCustomerDTO {
 
     private UUID id;
-    private UUID identificationType;
+    private FindIdentificationTypeDTO identificationType;
     private String identificationNumber;
     private String fullName;
     private String phoneNumber;
@@ -15,7 +17,7 @@ public final class FindCustomerDTO {
         super();
     }
 
-    public FindCustomerDTO(UUID id, UUID identificationType, String identificationNumber, String fullName, String phoneNumber, String email) {
+    public FindCustomerDTO(UUID id, FindIdentificationTypeDTO identificationType, String identificationNumber, String fullName, String phoneNumber, String email) {
         super();
         this.id = id;
         this.identificationType = identificationType;
@@ -33,11 +35,11 @@ public final class FindCustomerDTO {
         this.id = id;
     }
 
-    public UUID getIdentificationType() {
+    public FindIdentificationTypeDTO getIdentificationType() {
         return identificationType;
     }
 
-    public void setIdentificationType(UUID identificationType) {
+    public void setIdentificationType(FindIdentificationTypeDTO identificationType) {
         this.identificationType = identificationType;
     }
 

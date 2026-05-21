@@ -1,4 +1,4 @@
-package co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl;
+package co.edu.uco.aurora.application.usecase;
 
 public interface WelcomeEmailSender {
     void sendWelcomeEmail(String toEmail, String customerName);

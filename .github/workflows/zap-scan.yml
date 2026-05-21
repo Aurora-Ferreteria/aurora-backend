@@ -18,7 +18,7 @@ jobs:
         run: |
           echo "Iniciando validación de disponibilidad en Render..."
           # Intentará conectar cada 10 segundos. Tiempo máximo de espera: 5 minutos (300s).
-          timeout 150 bash -c '
+          timeout 300 bash -c '
           while [[ "$(curl -s -o /dev/null -w "%{http_code}" https://aurora-backend-bqn9.onrender.com)" != "200" ]]; do 
             echo "Esperando a que la aplicación en Render responda (Cold Start)..."
             sleep 10
