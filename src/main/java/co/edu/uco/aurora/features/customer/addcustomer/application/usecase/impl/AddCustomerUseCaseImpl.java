@@ -1,6 +1,6 @@
 package co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl;
 
-import co.edu.uco.aurora.crosscutting.exception.AuroraException;
+import co.edu.uco.aurora.application.usecase.WelcomeEmailSender;
 import co.edu.uco.aurora.crosscutting.helper.TextHelper;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.AddCustomerUseCase;

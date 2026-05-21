@@ -1,11 +1,13 @@
 package co.edu.uco.aurora.features.customer.findcustomer.application.usecase.domain;
 
+import co.edu.uco.aurora.features.identificationtype.findidentificationtype.application.usecase.domain.FindIdentificationTypeDomain;
+
 import java.util.UUID;
 
 public final class FindCustomerDomain {
 
     private UUID id;
-    private UUID identificationType;
+    private FindIdentificationTypeDomain identificationType;
     private String identificationNumber;
     private String fullName;
     private String phoneNumber;
@@ -15,7 +17,7 @@ public final class FindCustomerDomain {
         super();
     }
 
-    public FindCustomerDomain(UUID id, UUID identificationType, String identificationNumber, String fullName, String phoneNumber, String email) {
+    public FindCustomerDomain(UUID id, FindIdentificationTypeDomain identificationType, String identificationNumber, String fullName, String phoneNumber, String email) {
         super();
         this.id = id;
         this.identificationType = identificationType;
@@ -33,11 +35,11 @@ public final class FindCustomerDomain {
         this.id = id;
     }
 
-    public UUID getIdentificationType() {
+    public FindIdentificationTypeDomain getIdentificationType() {
         return identificationType;
     }
 
-    public void setIdentificationType(UUID identificationType) {
+    public void setIdentificationType(FindIdentificationTypeDomain identificationType) {
         this.identificationType = identificationType;
     }
 
