@@ -4,180 +4,121 @@ import co.edu.uco.aurora.crosscutting.helper.TextHelper;
 
 public enum MessagesEnum {
 
+    // =================================================================================
+    // REGLAS DE VALIDACIÓN: Formato de Cadenas
+    // =================================================================================
     STRING_FORMAT_VALUES_IS_VALID_RULE_DATA_IS_NULL(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-            "No se recibieron los parámetros requeridos para ejecutar la regla StringFormatValuesIsValidRule."
-    ),
+            "No se recibieron los parámetros requeridos para validar el formato del texto."),
     STRING_FORMAT_VALUES_IS_VALID_RULE_DATA_LENGTH_INVALID(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-            "Se requerían cuatro parámetros y llegó una cantidad menor para ejecutar la regla StringFormatValuesIsValidRule."
-    ),
+            "No se recibió la cantidad de datos necesarios para validar el formato del texto."),
     STRING_FORMAT_VALUES_IS_VALID_RULE_FORMAT_IS_INVALID(
-            "El dato [{0}] no cumple con el formato esperado.",
-            "La regla StringFormatValuesIsValidRule falló porque el dato [{0}] no cumple con el formato (Regex): {1}"
-    ),
+            "El dato [{0}] no cumple con el formato esperado."),
 
+    // =================================================================================
+    // REGLAS DE VALIDACIÓN: Longitud de Cadenas
+    // =================================================================================
     STRING_LENGTH_VALUES_IS_VALID_RULE_DATA_IS_NULL(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "No se recibieron los parámetros requeridos para ejecutar la regla StringLengthValuesIsValidRule."
-    ),
+            "No se recibieron los parámetros requeridos para validar la longitud del texto."),
     STRING_LENGTH_VALUES_IS_VALID_RULE_DATA_LENGTH_INVALID(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "Se requerían cinco parámetros y llegó una cantidad menor para ejecutar la regla StringLengthValuesIsValidRule."
-    ),
+            "No se recibió la cantidad de datos necesarios para validar la longitud del texto."),
     STRING_LENGTH_VALUES_IS_VALID_RULE_LENGTH_IS_INVALID(
-            "La longitud del dato [{0}] no es válida. Debe estar entre {1} y {2} caracteres.",
-                    "La regla StringLengthValuesIsValidRule falló porque la longitud del dato [{0}] no se encuentra en el rango permitido (Min: {1}, Max: {2})."
-    ),
+            "La longitud del dato [{0}] no es válida. Debe estar entre {1} y {2} caracteres."),
 
-
+    // =================================================================================
+    // REGLAS DE VALIDACIÓN: Presencia de Valores
+    // =================================================================================
     STRING_VALUELS_PRESENT_RULE_DATA_IS_NULL(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "No se recibieron los parámetros requeridos para ejecutar la regla StringValueIsPresentRule."
-    ),
+            "No se recibieron los parámetros requeridos para validar la presencia del dato."),
     STRING_VALUELS_PRESENT_RULE_DATA_LENGTH_INVALID(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "Se requerían tres parámetros y llegó una cantidad menor para ejecutar la regla StringValueIsPresentRule."
-    ),
+            "No se recibió la cantidad de datos necesarios para validar la presencia del dato."),
     STRING_VALUELS_PRESENT_RULE_DATA_IS_EMPTY(
-            "El dato [{0}] es requerido y no puede estar vacío.",
-                    "La regla StringValueIsPresentRule falló porque el dato [{0}] se encuentra vacío, es nulo o contiene solo espacios en blanco."
-    ),
+            "El dato [{0}] es requerido y no puede estar vacío."),
 
+    // =================================================================================
+    // REGLAS DE VALIDACIÓN: Identificadores (UUID)
+    // =================================================================================
     ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_IS_NULL(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "No se recibieron los parámetros requeridos para ejecutar la regla IdValueIsNotDefaultValueRule."
-    ),
+            "No se recibieron los parámetros requeridos para validar el identificador."),
     ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_LENGTH_INVALID(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "Se requerían dos parámetros y llegó una cantidad menor para ejecutar la regla IdValueIsNotDefaultValueRule."
-    ),
+            "No se recibió la cantidad de datos necesarios para validar el identificador."),
     ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_NULL(
-            "El identificador de [{0}] es requerido y no puede ser nulo.",
-                    "La regla IdValueIsNotDefaultValueRule falló porque el UUID para el dato [{0}] llegó nulo."
-    ),
+            "El identificador de [{0}] es requerido y no puede ser nulo."),
     ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_DEFAULT(
-            "El identificador de [{0}] no es un valor válido.",
-                    "La regla IdValueIsNotDefaultValueRule falló porque el UUID para el dato [{0}] es el valor por defecto (ceros)."
-    ),
+            "El identificador de [{0}] no es un valor válido."),
 
-
+    // =================================================================================
+    // REGLAS DE NEGOCIO: Tipos de Identificación
+    // =================================================================================
     ID_TYPE_EXISTS_BY_ID_RULE_DATA_IS_NULL(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "No se recibieron los parámetros requeridos para ejecutar la regla IdentificationTypeExistsByIdRule."
-    ),
+            "No se recibieron los parámetros requeridos para consultar el tipo de identificación."),
     ID_TYPE_EXISTS_BY_ID_RULE_DATA_LENGTH_INVALID(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "Se requerían dos parámetros y llegó una cantidad menor para ejecutar la regla IdentificationTypeExistsByIdRule."
-    ),
+            "No se recibió la cantidad de datos necesarios para consultar el tipo de identificación."),
     ID_TYPE_EXISTS_BY_ID_RULE_ID_TYPE_NOT_FOUND(
-            "El tipo de identificación proporcionado no es válido o no existe en el sistema.",
-                    "La regla IdentificationTypeExistsByIdRule falló porque no se encontró un registro en la base de datos con el ID: {0}"
-    ),
+            "El tipo de identificación proporcionado no es válido o no existe en el sistema."),
 
-
+    // =================================================================================
+    // REGLAS DE NEGOCIO: Clientes (Identificación)
+    // =================================================================================
     CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_DATA_IS_NULL(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-            "No se recibieron los parámetros requeridos para ejecutar la regla CustomerIdentificationNumberDoesNotExistRule."
-    ),
+            "No se recibieron los parámetros requeridos para validar la existencia del número de identificación."),
     CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_DATA_LENGTH_INVALID(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-            "Se requerían dos parámetros y llegó una cantidad menor para ejecutar la regla CustomerIdentificationNumberDoesNotExistRule."
-    ),
+            "No se recibió la cantidad de datos necesarios para validar la existencia del número de identificación."),
     CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS(
-            "El número de identificación ingresado ya se encuentra registrado en el sistema.",
-            "La regla CustomerIdentificationNumberDoesNotExistRule falló porque ya existe un cliente con el número de identificación: {0}"
-    ),
+            "El número de identificación ingresado ya se encuentra registrado en el sistema."),
 
-
+    // =================================================================================
+    // REGLAS DE NEGOCIO: Clientes (Teléfono)
+    // =================================================================================
     CUSTOMER_PHONE_NUMBER_DOES_NOT_EXIST_RULE_DATA_IS_NULL(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "No se recibieron los parámetros requeridos para ejecutar la regla CustomerPhoneNumberDoesNotExistRule."
-    ),
+            "No se recibieron los parámetros requeridos para validar la existencia del número de teléfono."),
     CUSTOMER_PHONE_NUMBER_DOES_NOT_EXIST_RULE_DATA_LENGTH_INVALID(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "Se requerían dos parámetros y llegó una cantidad menor para ejecutar la regla CustomerPhoneNumberDoesNotExistRule."
-    ),
+            "No se recibió la cantidad de datos necesarios para validar la existencia del número de teléfono."),
     CUSTOMER_PHONE_NUMBER_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS(
-            "El número de teléfono ingresado ya se encuentra registrado en el sistema.",
-                    "La regla CustomerPhoneNumberDoesNotExistRule falló porque ya existe un cliente con el número de teléfono: {0}"
-    ),
+            "El número de teléfono ingresado ya se encuentra registrado en el sistema."),
 
-
+    // =================================================================================
+    // REGLAS DE NEGOCIO: Clientes (Correo Electrónico)
+    // =================================================================================
     CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_DATA_IS_NULL(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "No se recibieron los parámetros requeridos para ejecutar la regla CustomerEmailDoesNotExistRule."
-    ),
+            "No se recibieron los parámetros requeridos para validar la existencia del correo electrónico."),
     CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_DATA_LENGTH_INVALID(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "Se requerían dos parámetros y llegó una cantidad menor para ejecutar la regla CustomerEmailDoesNotExistRule."
-    ),
+            "No se recibió la cantidad de datos necesarios para validar la existencia del correo electrónico."),
     CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS(
-            "El correo electrónico ingresado ya se encuentra registrado en el sistema.",
-                    "La regla CustomerEmailDoesNotExistRule falló porque ya existe un cliente con el correo electrónico: {0}"
-    ),
-
+            "El correo electrónico ingresado ya se encuentra registrado en el sistema."),
 
     // =================================================================================
-    // MENSAJES PARA EL CONTROLADOR: AddCustomerController
+    // MENSAJES DE ÉXITO Y ERROR EN CONTROLADORES
     // =================================================================================
-    CUSTOMER_REGISTER_SUCCESS(
-            "Operación realizada con éxito.",
-            "El cliente se ha registrado exitosamente en el sistema."
-    ),
+    SUCCESS_OPERATION(
+            "Operación realizada con éxito."),
     CUSTOMERS_UNEXPECTED_ERROR(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-            "Ocurrió un error inesperado al intentar registrar el nuevo cliente. Por favor, contacte al administrador del sistema."
-    ),
-
-
-    // =================================================================================
-    // MENSAJES PARA EL CONTROLADOR: FindCustomerController
-    // =================================================================================
-    FIND_CUSTOMER_SUCCESS(
-            "Operación realizada con éxito.",
-            "Los clientes han sido consultados exitosamente en el sistema."
-    ),
+            "Se ha presentado un problema inesperado al intentar registrar el nuevo cliente."),
     FIND_CUSTOMER_ERROR(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-            "Ocurrió un error inesperado al intentar consultar la lista de clientes. Por favor, inténtelo de nuevo más tarde."
-    ),
-
-    // =================================================================================
-    // MENSAJES PARA EL CONTROLADOR: FindIdentificationTypeController
-    // =================================================================================
-    FIND_IDENTIFICATION_TYPE_SUCCESS(
-            "Operación realizada con éxito.",
-                    "Los tipos de identificación han sido consultados exitosamente en el sistema."
-    ),
+            "Se ha presentado un problema inesperado al intentar consultar los clientes."),
     FIND_IDENTIFICATION_TYPE_ERROR(
-            "Se ha presentado un problema inesperado tratando de llevar a cabo la operación deseada.",
-                    "Ocurrió un error inesperado al intentar consultar la lista de tipos de identificación. Por favor, inténtelo de nuevo más tarde."
-    ),
+            "Se ha presentado un problema inesperado al intentar consultar los tipos de identificación."),
 
+    // =================================================================================
+    // SERVICIOS EXTERNOS (NOTIFICACIÓN)
+    // =================================================================================
     WELCOME_EMAIL_SENDING_ERROR(
-            "El cliente fue registrado con éxito en la base de datos, pero no se pudo enviar el correo de bienvenida.",
-                    "Ocurrió un error inesperado en el servicio externo (Resend) al intentar enviar el correo a [{0}]. Detalle técnico: {1}"
-    ),
-
+            "El cliente fue registrado con éxito, pero no se pudo enviar el correo de bienvenida. Detalle: {0}"),
     RESEND_SERVICE_SENDING_ERROR(
-            "El cliente fue registrado, pero ocurrió un problema al intentar enviar la notificación por correo.",
-            "La librería de Resend lanzó una excepción al intentar enviar el correo. Detalles: {0}"
-    );
+            "Ocurrió un problema con el proveedor de correos al intentar enviar la notificación. Detalle: {0}"),
 
-    private final String title;
-    private final String content;
+    // =================================================================================
+    // EXCEPCIONES GLOBALES
+    // =================================================================================
+    ERROR_HTTP_MESSAGE_NOT_READABLE_GENERIC(
+            "El formato de los datos enviados en la petición no es válido. Por favor, revise los campos.");
 
-    private MessagesEnum(final String title, final String content) {
-        this.title = TextHelper.getDefaultWithTrim(title);
-        this.content = TextHelper.getDefaultWithTrim(content);
+    private final String message;
+
+    private MessagesEnum(final String message) {
+        this.message = TextHelper.getDefaultWithTrim(message);
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContent() {
-        return content;
+    public String getMessage() {
+        return message;
     }
 }

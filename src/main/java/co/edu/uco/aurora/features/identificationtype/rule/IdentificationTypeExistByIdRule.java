@@ -25,26 +25,20 @@ public final class IdentificationTypeExistByIdRule implements Rule {
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)){
-            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_DATA_IS_NULL.getTitle();
-            var technicalMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_DATA_IS_NULL.getContent();
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_DATA_IS_NULL.getMessage();
+            throw AuroraException.create(userMessage);
         }
         if (data.length < 2){
-            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_DATA_LENGTH_INVALID.getTitle();
-            var technicalMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_DATA_LENGTH_INVALID.getContent();
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_DATA_LENGTH_INVALID.getMessage();
+            throw AuroraException.create(userMessage);
         }
 
         var id = (UUID) data[0];
         var repository = (IdentificationTypeRepository) data[1];
 
         if (!repository.existsById(id)) {
-            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_ID_TYPE_NOT_FOUND.getTitle();
-            var technicalMessage = TextHelper.format(
-                    MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_ID_TYPE_NOT_FOUND.getContent(),
-                    id.toString()
-            );
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_ID_TYPE_NOT_FOUND.getMessage();
+            throw AuroraException.create(userMessage);
         }
     }
  }

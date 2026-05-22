@@ -25,15 +25,13 @@ public final class IdValueIsNotDefaultValueRule implements Rule {
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)) {
-            var userMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_IS_NULL.getTitle();
-            var technicalMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_IS_NULL.getContent();
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_IS_NULL.getMessage();
+            throw AuroraException.create(userMessage);
         }
 
         if (data.length < 2) {
-            var userMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_LENGTH_INVALID.getTitle();
-            var technicalMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_LENGTH_INVALID.getContent();
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_LENGTH_INVALID.getMessage();
+            throw AuroraException.create(userMessage);
         }
 
         var uuid = (UUID) data[0];
@@ -41,27 +39,18 @@ public final class IdValueIsNotDefaultValueRule implements Rule {
 
         if (ObjectHelper.isNull(uuid)) {
             var userMessage = TextHelper.format(
-                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_NULL.getTitle(),
+                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_NULL.getMessage(),
                     dataName
             );
-            var technicalMessage = TextHelper.format(
-                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_NULL.getContent(),
-                    dataName
-            );
-            throw AuroraException.create(userMessage, technicalMessage);
+            throw AuroraException.create(userMessage);
         }
 
         if (UUIDHelper.isDefaultUUID(uuid)) {
             var userMessage = TextHelper.format(
-                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_DEFAULT.getTitle(),
+                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_DEFAULT.getMessage(),
                     dataName
             );
-            var technicalMessage = TextHelper.format(
-                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_DEFAULT.getContent(),
-                    dataName
-            );
-            throw AuroraException.create(userMessage, technicalMessage);
+            throw AuroraException.create(userMessage);
         }
-
     }
 }

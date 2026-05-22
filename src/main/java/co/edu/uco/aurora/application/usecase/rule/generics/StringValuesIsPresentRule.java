@@ -21,14 +21,12 @@ public final class StringValuesIsPresentRule implements Rule {
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)){
-            var userMessage = MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_IS_NULL.getTitle();
-            var technicalMessage = MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_IS_NULL.getContent();
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_IS_NULL.getMessage();
+            throw AuroraException.create(userMessage);
         }
         if (data.length < 3){
-            var userMessage = MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_LENGTH_INVALID.getTitle();
-            var technicalMessage = MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_LENGTH_INVALID.getContent();
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_LENGTH_INVALID.getMessage();
+            throw AuroraException.create(userMessage);
         }
 
         var stringData = (String) data[0];
@@ -38,14 +36,10 @@ public final class StringValuesIsPresentRule implements Rule {
         if ((mustApplyTrim)
                 ? TextHelper.isEmptyWithTrim(stringData) : TextHelper.isEmpty(stringData)) {
             var userMessage = TextHelper.format(
-                    MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_IS_EMPTY.getTitle(),
+                    MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_IS_EMPTY.getMessage(),
                     dataName
             );
-            var technicalMessage = TextHelper.format(
-                    MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_IS_EMPTY.getContent(),
-                    dataName
-            );
-            throw AuroraException.create(userMessage, technicalMessage);
+            throw AuroraException.create(userMessage);
         }
 
     }
