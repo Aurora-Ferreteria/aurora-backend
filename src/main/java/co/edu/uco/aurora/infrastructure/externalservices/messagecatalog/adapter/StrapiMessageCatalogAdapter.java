@@ -35,7 +35,7 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
 
     @Override
     public String getMessageContent(MessagesEnum message) {
-        return messageCache.getOrDefault(message.name(), message.getMessage());
+        return messageCache.getOrDefault(message.name(), message.name());
     }
 
     @Override

@@ -22,12 +22,12 @@ public final class CustomerEmailDoesNotExistRule implements Rule {
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)) {
-            var userMessage = MessagesEnum.CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_DATA_IS_NULL.getMessage();
+            var userMessage = MessagesEnum.CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_DATA_IS_NULL.name();
             throw AuroraException.create(userMessage);
         }
 
         if (data.length < 2) {
-            var userMessage = MessagesEnum.CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_DATA_LENGTH_INVALID.getMessage();
+            var userMessage = MessagesEnum.CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_DATA_LENGTH_INVALID.name();
             throw AuroraException.create(userMessage);
         }
 
@@ -37,7 +37,7 @@ public final class CustomerEmailDoesNotExistRule implements Rule {
         boolean exists = repository.existsByEmail(email);
 
         if (exists) {
-            var userMessage = MessagesEnum.CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS.getMessage();
+            var userMessage = MessagesEnum.CUSTOMER_EMAIL_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS.name();
             throw AuroraException.create(userMessage);
         }
     }

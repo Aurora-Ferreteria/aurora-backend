@@ -21,11 +21,11 @@ public final class StringValuesIsPresentRule implements Rule {
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)){
-            var userMessage = MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_IS_NULL.getMessage();
+            var userMessage = MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_IS_NULL.name();
             throw AuroraException.create(userMessage);
         }
         if (data.length < 3){
-            var userMessage = MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_LENGTH_INVALID.getMessage();
+            var userMessage = MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_LENGTH_INVALID.name();
             throw AuroraException.create(userMessage);
         }
 
@@ -36,7 +36,7 @@ public final class StringValuesIsPresentRule implements Rule {
         if ((mustApplyTrim)
                 ? TextHelper.isEmptyWithTrim(stringData) : TextHelper.isEmpty(stringData)) {
             var userMessage = TextHelper.format(
-                    MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_IS_EMPTY.getMessage(),
+                    MessagesEnum.STRING_VALUELS_PRESENT_RULE_DATA_IS_EMPTY.name(),
                     dataName
             );
             throw AuroraException.create(userMessage);

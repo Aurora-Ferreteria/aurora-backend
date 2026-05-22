@@ -21,7 +21,7 @@ public final class GlobalApiExceptionHandler {
         HttpStatus responseStatusCode = HttpStatus.BAD_REQUEST;
 
         // Se asigna el mensaje genérico para cualquier error de formato o lectura
-        String userMessage = MessagesEnum.ERROR_HTTP_MESSAGE_NOT_READABLE_GENERIC.getMessage();
+        String userMessage = MessagesEnum.ERROR_HTTP_MESSAGE_NOT_READABLE_GENERIC.name();
 
         responseObjectData.addMessage(userMessage);
 
