@@ -37,7 +37,7 @@ public class FindCustomerController {
             List<FindCustomerDTO> customers = inputPort.execute(null);
             responseObjectData.setData(customers);
             responseObjectData.addMessage(
-                    MessagesEnum.FIND_CUSTOMER_SUCCESS.getContent()
+                    MessagesEnum.SUCCESS_OPERATION.getMessage()
             );
 
         } catch (final AuroraException exception) {
@@ -49,7 +49,7 @@ public class FindCustomerController {
         } catch (final Exception exception) {
             responseObjectData = Response.createFailedResponse();
             responseObjectData.addMessage(
-                    MessagesEnum.FIND_CUSTOMER_ERROR.getContent()
+                    MessagesEnum.SUCCESS_OPERATION.getMessage()
             );
             responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             exception.printStackTrace();

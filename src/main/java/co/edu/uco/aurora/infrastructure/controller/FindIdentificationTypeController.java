@@ -35,7 +35,7 @@ public class FindIdentificationTypeController {
             List<FindIdentificationTypeDTO> types = inputPort.execute(null);
             responseObjectData.setData(types);
             responseObjectData.addMessage(
-                    MessagesEnum.FIND_IDENTIFICATION_TYPE_SUCCESS.getContent()
+                    MessagesEnum.SUCCESS_OPERATION.getMessage()
             );
 
         } catch (final AuroraException exception) {
@@ -47,7 +47,7 @@ public class FindIdentificationTypeController {
         } catch (final Exception exception) {
             responseObjectData = Response.createFailedResponse();
             responseObjectData.addMessage(
-                    MessagesEnum.FIND_IDENTIFICATION_TYPE_ERROR.getContent()
+                    MessagesEnum.SUCCESS_OPERATION.getMessage()
             );
             responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             exception.printStackTrace();

@@ -22,15 +22,13 @@ public final class CustomerIdentificationNumberDoesNotExistRule implements Rule 
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)) {
-            var userMessage = MessagesEnum.CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_DATA_IS_NULL.getTitle();
-            var technicalMessage = MessagesEnum.CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_DATA_IS_NULL.getContent();
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_DATA_IS_NULL.getMessage();
+            throw AuroraException.create(userMessage);
         }
 
         if (data.length < 2) {
-            var userMessage = MessagesEnum.CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_DATA_LENGTH_INVALID.getTitle();
-            var technicalMessage = MessagesEnum.CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_DATA_LENGTH_INVALID.getContent();
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_DATA_LENGTH_INVALID.getMessage();
+            throw AuroraException.create(userMessage);
         }
 
         var idNumber = (String) data[0];
@@ -39,12 +37,8 @@ public final class CustomerIdentificationNumberDoesNotExistRule implements Rule 
         boolean exists = repository.existsByIdentificationNumber(idNumber);
 
         if (exists) {
-            var userMessage = MessagesEnum.CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS.getTitle();
-            var technicalMessage = TextHelper.format(
-                    MessagesEnum.CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS.getContent(),
-                    idNumber
-            );
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.CUSTOMER_ID_NUMBER_DOES_NOT_EXIST_RULE_CUSTOMER_ALREADY_EXISTS.getMessage();
+            throw AuroraException.create(userMessage);
         }
 
     }

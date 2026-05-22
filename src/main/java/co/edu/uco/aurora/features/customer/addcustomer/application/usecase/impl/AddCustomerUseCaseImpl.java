@@ -1,6 +1,7 @@
 package co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl;
 
-import co.edu.uco.aurora.application.usecase.WelcomeEmailSender;
+import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.impl.mapper.AddCustomerEmailMapper;
+import co.edu.uco.aurora.infrastructure.externalservices.notification.WelcomeEmailSender;
 import co.edu.uco.aurora.crosscutting.helper.TextHelper;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 import co.edu.uco.aurora.features.customer.addcustomer.application.usecase.AddCustomerUseCase;
@@ -12,6 +13,7 @@ import co.edu.uco.aurora.features.customer.rule.validator.ValidateCustomerIdenti
 import co.edu.uco.aurora.features.customer.rule.validator.ValidateCustomerPhoneNumberDoesNotExist;
 import co.edu.uco.aurora.features.identificationtype.rule.validator.ValidateIdentificationTypeExistsById;
 
+import co.edu.uco.aurora.infrastructure.externalservices.notification.dto.WelcomeEmailDTO;
 import co.edu.uco.aurora.infrastructure.persistence.repository.CustomerRepository;
 import co.edu.uco.aurora.infrastructure.persistence.repository.IdentificationTypeRepository;
 import co.edu.uco.aurora.infrastructure.persistence.repository.entity.CustomerEntity;
@@ -30,14 +32,17 @@ public class AddCustomerUseCaseImpl implements AddCustomerUseCase {
     private final CustomerRepository customerRepository;
     private final IdentificationTypeRepository identificationTypeRepository;
     private final AddCustomerEntityMapper mapper;
+    private final AddCustomerEmailMapper emailMapper;
     private final WelcomeEmailSender emailSender;
 
     public AddCustomerUseCaseImpl(CustomerRepository customerRepository,
                                   IdentificationTypeRepository identificationTypeRepository,
-                                  AddCustomerEntityMapper mapper, WelcomeEmailSender emailSender) {
+                                  AddCustomerEntityMapper mapper, AddCustomerEmailMapper emailMapper,
+                                  WelcomeEmailSender emailSender) {
         this.customerRepository = customerRepository;
         this.identificationTypeRepository = identificationTypeRepository;
         this.mapper = mapper;
+        this.emailMapper = emailMapper;
         this.emailSender = emailSender;
     }
 
@@ -56,11 +61,12 @@ public class AddCustomerUseCaseImpl implements AddCustomerUseCase {
         customerRepository.create(customerEntity);
 
         try {
-            emailSender.sendWelcomeEmail(data.getEmail(), data.getFullName());
+            WelcomeEmailDTO emailDto = emailMapper.toDto(data);
+
+            emailSender.sendWelcomeEmail(emailDto);
         } catch (Exception e) {
-            // Armamos el mensaje estructurado con tu catálogo
             var technicalMessage = TextHelper.format(
-                    MessagesEnum.WELCOME_EMAIL_SENDING_ERROR.getContent(),
+                    MessagesEnum.WELCOME_EMAIL_SENDING_ERROR.getMessage(),
                     data.getEmail(),
                     e.getMessage()
             );

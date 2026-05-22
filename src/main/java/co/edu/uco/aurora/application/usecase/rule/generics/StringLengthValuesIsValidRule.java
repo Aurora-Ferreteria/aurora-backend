@@ -22,14 +22,12 @@ public final class StringLengthValuesIsValidRule implements Rule {
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)){
-            var userMessage = MessagesEnum.STRING_LENGTH_VALUES_IS_VALID_RULE_DATA_IS_NULL.getTitle();
-            var technicalMessage = MessagesEnum.STRING_LENGTH_VALUES_IS_VALID_RULE_DATA_IS_NULL.getContent();
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.STRING_LENGTH_VALUES_IS_VALID_RULE_DATA_IS_NULL.getMessage();
+            throw AuroraException.create(userMessage);
         }
         if (data.length < 5){
-            var userMessage = MessagesEnum.STRING_LENGTH_VALUES_IS_VALID_RULE_DATA_LENGTH_INVALID.getTitle();
-            var technicalMessage = MessagesEnum.STRING_LENGTH_VALUES_IS_VALID_RULE_DATA_LENGTH_INVALID.getContent();
-            throw AuroraException.create(userMessage, technicalMessage);
+            var userMessage = MessagesEnum.STRING_LENGTH_VALUES_IS_VALID_RULE_DATA_LENGTH_INVALID.getMessage();
+            throw AuroraException.create(userMessage);
         }
 
         var stringData = (String) data[0];
@@ -45,14 +43,10 @@ public final class StringLengthValuesIsValidRule implements Rule {
             var maxLengthStr = String.valueOf(maxLength);
 
             var userMessage = TextHelper.format(
-                    MessagesEnum.STRING_LENGTH_VALUES_IS_VALID_RULE_LENGTH_IS_INVALID.getTitle(),
+                    MessagesEnum.STRING_LENGTH_VALUES_IS_VALID_RULE_LENGTH_IS_INVALID.getMessage(),
                     dataName, minLengthStr, maxLengthStr
             );
-            var technicalMessage = TextHelper.format(
-                    MessagesEnum.STRING_LENGTH_VALUES_IS_VALID_RULE_LENGTH_IS_INVALID.getContent(),
-                    dataName, minLengthStr, maxLengthStr
-            );
-            throw AuroraException.create(userMessage, technicalMessage);
+            throw AuroraException.create(userMessage);
         }
 
     }

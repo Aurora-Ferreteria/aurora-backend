@@ -1,31 +1,12 @@
-package co.edu.uco.aurora.infrastructure.externalservices.resend;
+package co.edu.uco.aurora.infrastructure.externalservices.notification.adapter.template;
 
-import co.edu.uco.aurora.crosscutting.exception.AuroraException;
-import co.edu.uco.aurora.crosscutting.helper.TextHelper;
-import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
-import co.edu.uco.aurora.application.usecase.WelcomeEmailSender;
-import com.resend.Resend;
-import com.resend.services.emails.model.CreateEmailOptions;
-import com.resend.services.emails.model.CreateEmailResponse;
+public class WelcomeEmailTemplate {
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+    private WelcomeEmailTemplate() {
+    }
 
-@Service
-public class ResendEmailService implements WelcomeEmailSender {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResendEmailService.class);
-
-    @Value("${api.resend.key}")
-    private String resendApiKey;
-
-    @Override
-    public void sendWelcomeEmail(String toEmail, String customerName) {
-        Resend resend = new Resend(resendApiKey);
-
-        String htmlBody = """
+    public static String buildHtml(String customerName) {
+        return """
             <!DOCTYPE html>
             <html lang="es">
             <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 40px 20px;">
@@ -51,25 +32,5 @@ public class ResendEmailService implements WelcomeEmailSender {
             </body>
             </html>
             """.formatted(customerName);
-
-        CreateEmailOptions options = CreateEmailOptions.builder()
-                .from("Ferretería Aurora <administradores@aurorajpkd.com>")
-                .to(toEmail)
-                .subject("¡Estás registrado en Ferretería Aurora! 🛠️")
-                .html(htmlBody)
-                .build();
-
-        try {
-            CreateEmailResponse data = resend.emails().send(options);
-            LOGGER.info("Correo de bienvenida enviado con éxito. ID de Resend: {}", data.getId());
-
-        } catch (Exception e) {
-            var userMessage = MessagesEnum.RESEND_SERVICE_SENDING_ERROR.getTitle();
-            var technicalMessage = TextHelper.format(
-                    MessagesEnum.RESEND_SERVICE_SENDING_ERROR.getContent(),
-                    e.getMessage()
-            );
-            throw AuroraException.create(userMessage, technicalMessage);
-        }
     }
 }

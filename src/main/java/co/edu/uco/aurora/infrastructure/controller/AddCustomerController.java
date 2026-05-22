@@ -36,7 +36,7 @@ public class AddCustomerController {
             inputPort.execute(customer);
 
             responseObjectData.addMessage(
-                    MessagesEnum.CUSTOMER_REGISTER_SUCCESS.getContent()
+                    MessagesEnum.SUCCESS_OPERATION.getMessage()
             );
 
         } catch (final AuroraException exception) {
@@ -48,7 +48,7 @@ public class AddCustomerController {
         } catch (final Exception exception) {
             responseObjectData = Response.createFailedResponse();
             responseObjectData.addMessage(
-                    MessagesEnum.CUSTOMERS_UNEXPECTED_ERROR.getContent()
+                    MessagesEnum.SUCCESS_OPERATION.getMessage()
             );
             responseStatusCode = HttpStatus.INTERNAL_SERVER_ERROR;
             exception.printStackTrace();
