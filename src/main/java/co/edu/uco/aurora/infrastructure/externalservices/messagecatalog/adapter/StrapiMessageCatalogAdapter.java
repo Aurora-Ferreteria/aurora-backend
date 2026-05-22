@@ -4,6 +4,7 @@ import co.edu.uco.aurora.crosscutting.messagescatalog.MessageCatalogService;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 import co.edu.uco.aurora.infrastructure.externalservices.messagecatalog.dto.StrapiMessageResponseDTO;
 import co.edu.uco.aurora.infrastructure.externalservices.messagecatalog.adapter.mapper.StrapiMessageMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import jakarta.annotation.PostConstruct;
@@ -16,7 +17,8 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
 
     private Map<String, String> messageCache = new HashMap<>();
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String strapiUrl = "http://localhost:1337/api/messages?pagination[pageSize]=100";
+    @Value("${strapi.api.url}")
+    private String strapiUrl;
 
     @PostConstruct
     public void initializeCache() {
