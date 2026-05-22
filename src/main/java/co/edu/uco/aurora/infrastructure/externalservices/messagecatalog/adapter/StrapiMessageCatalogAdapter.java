@@ -17,7 +17,7 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
 
     private Map<String, String> messageCache = new HashMap<>();
     private final RestTemplate restTemplate = new RestTemplate();
-    @Value("${strapi.api.url}")
+    @Value("${api.strapi.url}")
     private String strapiUrl;
 
     @PostConstruct
