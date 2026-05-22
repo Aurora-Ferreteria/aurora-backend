@@ -25,12 +25,12 @@ public final class IdValueIsNotDefaultValueRule implements Rule {
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)) {
-            var userMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_IS_NULL.getMessage();
+            var userMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_IS_NULL.name();
             throw AuroraException.create(userMessage);
         }
 
         if (data.length < 2) {
-            var userMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_LENGTH_INVALID.getMessage();
+            var userMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_LENGTH_INVALID.name();
             throw AuroraException.create(userMessage);
         }
 
@@ -39,7 +39,7 @@ public final class IdValueIsNotDefaultValueRule implements Rule {
 
         if (ObjectHelper.isNull(uuid)) {
             var userMessage = TextHelper.format(
-                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_NULL.getMessage(),
+                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_NULL.name(),
                     dataName
             );
             throw AuroraException.create(userMessage);
@@ -47,7 +47,7 @@ public final class IdValueIsNotDefaultValueRule implements Rule {
 
         if (UUIDHelper.isDefaultUUID(uuid)) {
             var userMessage = TextHelper.format(
-                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_DEFAULT.getMessage(),
+                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_DEFAULT.name(),
                     dataName
             );
             throw AuroraException.create(userMessage);

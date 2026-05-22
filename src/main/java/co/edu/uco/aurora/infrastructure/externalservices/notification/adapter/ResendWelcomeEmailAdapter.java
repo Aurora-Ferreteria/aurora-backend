@@ -35,7 +35,7 @@ public class ResendWelcomeEmailAdapter implements WelcomeEmailSender {
             resend.emails().send(options);
 
         } catch (Exception e) {
-            var userMessage = MessagesEnum.RESEND_SERVICE_SENDING_ERROR.getMessage();
+            var userMessage = MessagesEnum.RESEND_SERVICE_SENDING_ERROR.name();
             throw AuroraException.create(userMessage);
         }
     }

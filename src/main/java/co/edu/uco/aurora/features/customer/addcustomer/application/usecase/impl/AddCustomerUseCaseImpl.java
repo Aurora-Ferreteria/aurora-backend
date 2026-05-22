@@ -66,7 +66,7 @@ public class AddCustomerUseCaseImpl implements AddCustomerUseCase {
             emailSender.sendWelcomeEmail(emailDto);
         } catch (Exception e) {
             var technicalMessage = TextHelper.format(
-                    MessagesEnum.WELCOME_EMAIL_SENDING_ERROR.getMessage(),
+                    MessagesEnum.WELCOME_EMAIL_SENDING_ERROR.name(),
                     data.getEmail(),
                     e.getMessage()
             );

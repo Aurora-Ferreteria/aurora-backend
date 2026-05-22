@@ -25,11 +25,11 @@ public final class IdentificationTypeExistByIdRule implements Rule {
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)){
-            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_DATA_IS_NULL.getMessage();
+            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_DATA_IS_NULL.name();
             throw AuroraException.create(userMessage);
         }
         if (data.length < 2){
-            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_DATA_LENGTH_INVALID.getMessage();
+            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_DATA_LENGTH_INVALID.name();
             throw AuroraException.create(userMessage);
         }
 
@@ -37,7 +37,7 @@ public final class IdentificationTypeExistByIdRule implements Rule {
         var repository = (IdentificationTypeRepository) data[1];
 
         if (!repository.existsById(id)) {
-            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_ID_TYPE_NOT_FOUND.getMessage();
+            var userMessage = MessagesEnum.ID_TYPE_EXISTS_BY_ID_RULE_ID_TYPE_NOT_FOUND.name();
             throw AuroraException.create(userMessage);
         }
     }

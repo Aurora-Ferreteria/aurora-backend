@@ -22,12 +22,12 @@ public final class StringFormatValueIsValidRule implements Rule {
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)) {
-            var userMessage = MessagesEnum.STRING_FORMAT_VALUES_IS_VALID_RULE_DATA_IS_NULL.getMessage();
+            var userMessage = MessagesEnum.STRING_FORMAT_VALUES_IS_VALID_RULE_DATA_IS_NULL.name();
             throw AuroraException.create(userMessage);
         }
 
         if (data.length < 4) {
-            var userMessage = MessagesEnum.STRING_FORMAT_VALUES_IS_VALID_RULE_DATA_LENGTH_INVALID.getMessage();
+            var userMessage = MessagesEnum.STRING_FORMAT_VALUES_IS_VALID_RULE_DATA_LENGTH_INVALID.name();
             throw AuroraException.create(userMessage);
         }
 
@@ -42,7 +42,7 @@ public final class StringFormatValueIsValidRule implements Rule {
 
         if (!TextHelper.isEmpty(dataToValidate) && !TextHelper.matchesRegex(dataToValidate, regex)) {
             var userMessage = TextHelper.format(
-                    MessagesEnum.STRING_FORMAT_VALUES_IS_VALID_RULE_FORMAT_IS_INVALID.getMessage(),
+                    MessagesEnum.STRING_FORMAT_VALUES_IS_VALID_RULE_FORMAT_IS_INVALID.name(),
                     dataName
             );
             throw AuroraException.create(userMessage);
