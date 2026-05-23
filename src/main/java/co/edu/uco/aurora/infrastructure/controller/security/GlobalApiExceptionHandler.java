@@ -32,6 +32,7 @@ public final class GlobalApiExceptionHandler {
         return new ResponseEntity<>(responseObjectData, HttpStatus.BAD_REQUEST);
     }
 
+    // AHORA SÍ: Captura todos los errores de Aurora que no sean atrapados en el Controller
     @ExceptionHandler(AuroraException.class)
     public ResponseEntity<Response<String>> handleAuroraException(
             AuroraException ex, WebRequest request) {
@@ -41,6 +42,7 @@ public final class GlobalApiExceptionHandler {
 
         try {
             MessagesEnum enumKey = MessagesEnum.valueOf(ex.getUserMessage());
+            // Aquí consulta a Strapi (o a la caché local) el mensaje en español/inglés
             translatedMessage = messageCatalogService.getMessageContent(enumKey);
         } catch (IllegalArgumentException e) {
             translatedMessage = ex.getUserMessage();
@@ -48,5 +50,26 @@ public final class GlobalApiExceptionHandler {
 
         responseObjectData.addMessage(translatedMessage);
         return new ResponseEntity<>(responseObjectData, HttpStatus.BAD_REQUEST);
+    }
+
+    // NUEVO: Captura excepciones genéricas (Errores 500)
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Response<String>> handleGenericException(
+            Exception ex, WebRequest request) {
+
+        ex.printStackTrace(); // Recomendable cambiar esto por un Logger real en producción (ej. slf4j)
+
+        Response<String> responseObjectData = Response.createFailedResponse();
+        String translatedMessage;
+
+        try {
+            // Traduce el mensaje genérico inesperado
+            translatedMessage = messageCatalogService.getMessageContent(MessagesEnum.CUSTOMERS_UNEXPECTED_ERROR);
+        } catch (Exception e) {
+            translatedMessage = MessagesEnum.CUSTOMERS_UNEXPECTED_ERROR.name();
+        }
+
+        responseObjectData.addMessage(translatedMessage);
+        return new ResponseEntity<>(responseObjectData, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
