@@ -26,18 +26,23 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
     @PostConstruct
     public void initializeCache() {
         try {
-            // Agregamos locale=all para traer inglés y español
             String urlConPaginacion = strapiUrl + (strapiUrl.contains("?") ? "&" : "?") + "pagination[pageSize]=100&locale=all";
+
+            System.out.println("[DEBUG] Intentando conectar a: " + urlConPaginacion); // <--- AGREGA ESTO
 
             StrapiMessageResponseDTO response = restTemplate.getForObject(urlConPaginacion, StrapiMessageResponseDTO.class);
 
-            if (response != null) {
+            if (response != null && response.getData() != null) {
+                System.out.println("[DEBUG] Registros recibidos: " + response.getData().size()); // <--- AGREGA ESTO
                 this.messageCache = StrapiMessageMapper.toI18nCacheMap(response);
                 System.out.println("[Aurora] Catálogo i18n cargado exitosamente. Idiomas: " + this.messageCache.keySet());
+            } else {
+                System.out.println("[DEBUG] La respuesta de Strapi fue nula o data es nula"); // <--- AGREGA ESTO
             }
 
         } catch (Exception e) {
             System.err.println("[Error] No se pudo cargar el catálogo de Strapi: " + e.getMessage());
+            e.printStackTrace(); // <--- AGREGA ESTO para ver el error real
         }
     }
 
