@@ -1,11 +1,10 @@
 package co.edu.uco.aurora.infrastructure.externalservices.messagecatalog.dto;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class StrapiMessageResponseDTO {
-    private Object data;
+    private List<StrapiMessageDataDTO> data;
 
-    public Object getData() { return data; }
-    public void setData(Object data) { this.data = data; }
+    public List<StrapiMessageDataDTO> getData() { return data; }
+    public void setData(List<StrapiMessageDataDTO> data) { this.data = data; }
 }
