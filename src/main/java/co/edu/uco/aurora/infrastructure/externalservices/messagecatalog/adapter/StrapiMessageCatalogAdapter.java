@@ -27,8 +27,7 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
     public void initializeCache() {
         try {
             // Ahora strapiUrl viene limpio de Doppler. Le concatenamos TODOS los parámetros aquí.
-            String urlConPaginacion = strapiUrl + "?populate=*&publicationState=preview&pagination[pageSize]=100&locale=all";
-
+            String urlConPaginacion = strapiUrl + "?populate=*&publicationState=preview&pagination[pageSize]=100";
             System.out.println("[DEBUG] Intentando conectar a: " + urlConPaginacion);
 
             StrapiMessageResponseDTO response = restTemplate.getForObject(urlConPaginacion, StrapiMessageResponseDTO.class);
