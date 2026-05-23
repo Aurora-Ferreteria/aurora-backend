@@ -25,6 +25,16 @@ public final class GlobalApiExceptionHandler {
     public ResponseEntity<Response<String>> handleHttpMessageNotReadableException(
             HttpMessageNotReadableException ex, WebRequest request) {
 
+        // --- 🕵️‍♂️ LÍNEAS DE DEBUGG (Cópialas tal cual) ---
+        String headerCrudo = request.getHeader("Accept-Language");
+        String idiomaDetectado = org.springframework.context.i18n.LocaleContextHolder.getLocale().getLanguage();
+
+        System.out.println("\n--- DEBUGG IDIOMAS ---");
+        System.out.println("1. Lo que envió Vue (Header crudo): " + headerCrudo);
+        System.out.println("2. Lo que Spring entendió: " + idiomaDetectado);
+        System.out.println("----------------------\n");
+        // --------------------------------------------------
+
         Response<String> responseObjectData = Response.createFailedResponse();
         String userMessage = messageCatalogService.getMessageContent(MessagesEnum.ERROR_HTTP_MESSAGE_NOT_READABLE_GENERIC);
 
