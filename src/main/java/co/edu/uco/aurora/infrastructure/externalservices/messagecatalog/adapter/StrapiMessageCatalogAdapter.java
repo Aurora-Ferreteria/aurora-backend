@@ -5,6 +5,7 @@ import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 import co.edu.uco.aurora.infrastructure.externalservices.messagecatalog.dto.StrapiMessageResponseDTO;
 import co.edu.uco.aurora.infrastructure.externalservices.messagecatalog.adapter.mapper.StrapiMessageMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import jakarta.annotation.PostConstruct;
@@ -15,21 +16,26 @@ import java.util.Map;
 @Component
 public class StrapiMessageCatalogAdapter implements MessageCatalogService {
 
-    private Map<String, String> messageCache = new HashMap<>();
+    // El mapa ahora tiene dos niveles: Idioma -> (Clave -> Valor)
+    private Map<String, Map<String, String>> messageCache = new HashMap<>();
     private final RestTemplate restTemplate = new RestTemplate();
+
     @Value("${api.strapi.url}")
     private String strapiUrl;
 
     @PostConstruct
     public void initializeCache() {
         try {
-            // 1. Va a internet y trae el DTO
-            StrapiMessageResponseDTO response = restTemplate.getForObject(strapiUrl, StrapiMessageResponseDTO.class);
+            // Agregamos locale=all para traer inglés y español
+            String urlConPaginacion = strapiUrl + (strapiUrl.contains("?") ? "&" : "?") + "pagination[pageSize]=100&locale=all";
 
-            // 2. Usa tu MAPPER para limpiar la basura de Strapi y quedarse solo con los datos útiles
-            this.messageCache = StrapiMessageMapper.toCacheMap(response);
+            StrapiMessageResponseDTO response = restTemplate.getForObject(urlConPaginacion, StrapiMessageResponseDTO.class);
 
-            System.out.println("[Aurora] Catálogo de mensajes cargado exitosamente desde Strapi.");
+            if (response != null) {
+                this.messageCache = StrapiMessageMapper.toI18nCacheMap(response);
+                System.out.println("[Aurora] Catálogo i18n cargado exitosamente. Idiomas: " + this.messageCache.keySet());
+            }
+
         } catch (Exception e) {
             System.err.println("[Error] No se pudo cargar el catálogo de Strapi: " + e.getMessage());
         }
@@ -37,7 +43,15 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
 
     @Override
     public String getMessageContent(MessagesEnum message) {
-        return messageCache.getOrDefault(message.name(), message.name());
+        // Lee el idioma que envía el frontend en la cabecera
+        String currentLanguage = LocaleContextHolder.getLocale().getLanguage();
+
+        Map<String, String> localeMap = messageCache.getOrDefault(currentLanguage, messageCache.get("es"));
+
+        if (localeMap != null) {
+            return localeMap.getOrDefault(message.name(), message.name());
+        }
+        return message.name();
     }
 
     @Override
