@@ -7,23 +7,34 @@ import java.util.Map;
 public final class StrapiMessageMapper {
 
     private StrapiMessageMapper() {
-        // Constructor privado para evitar instanciar clases utilitarias
     }
 
-    // Traduce el DTO complejo de Strapi a un Mapa simple de Java
-    public static Map<String, String> toCacheMap(StrapiMessageResponseDTO response) {
-        Map<String, String> cleanedMessages = new HashMap<>();
+    public static Map<String, Map<String, String>> toI18nCacheMap(StrapiMessageResponseDTO response) {
+        // 🚀 El mapa principal que guardará los idiomas (Ej: "es" -> {...}, "en" -> {...})
+        Map<String, Map<String, String>> i18nCache = new HashMap<>();
 
         if (response != null && response.getData() != null) {
             response.getData().forEach(item -> {
                 if (item.getAttributes() != null) {
                     String key = item.getAttributes().getKey();
                     String value = item.getAttributes().getValue();
-                    cleanedMessages.put(key, value);
+
+                    // 🚀 Leemos el idioma directamente de los atributos de Strapi
+                    String locale = item.getAttributes().getLocale();
+
+                    // Verificamos que ninguno de los datos clave venga nulo
+                    if (key != null && value != null && locale != null) {
+
+                        // Si es la primera vez que vemos este idioma, creamos su diccionario interno
+                        i18nCache.putIfAbsent(locale, new HashMap<>());
+
+                        // Entramos al diccionario de ese idioma y guardamos la clave y el valor
+                        i18nCache.get(locale).put(key, value);
+                    }
                 }
             });
         }
 
-        return cleanedMessages;
+        return i18nCache;
     }
 }
