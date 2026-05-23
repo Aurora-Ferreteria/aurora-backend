@@ -48,14 +48,34 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
 
     @Override
     public String getMessageContent(MessagesEnum message) {
-        // Lee el idioma que envía el frontend en la cabecera
+        // 1. Obtener el código de idioma base (ej: "es", "en")
         String currentLanguage = LocaleContextHolder.getLocale().getLanguage();
 
-        Map<String, String> localeMap = messageCache.getOrDefault(currentLanguage, messageCache.get("es"));
+        // 2. Intentar buscar el mapa de mensajes para ese idioma
+        Map<String, String> localeMap = messageCache.get(currentLanguage);
 
+        // 3. Si es nulo, buscar una clave que empiece por el idioma (ej: si busca "es" y tenemos "es-CO")
+        if (localeMap == null) {
+            String matchingKey = messageCache.keySet().stream()
+                    .filter(key -> key.startsWith(currentLanguage))
+                    .findFirst()
+                    .orElse(null);
+
+            if (matchingKey != null) {
+                localeMap = messageCache.get(matchingKey);
+            }
+        }
+
+        // 4. Si sigue siendo nulo, usar el primer idioma disponible en la caché como último recurso
+        if (localeMap == null && !messageCache.isEmpty()) {
+            localeMap = messageCache.values().iterator().next();
+        }
+
+        // 5. Retornar el mensaje o el nombre del enum si no se mapeó nada
         if (localeMap != null) {
             return localeMap.getOrDefault(message.name(), message.name());
         }
+
         return message.name();
     }
 
