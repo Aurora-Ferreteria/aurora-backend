@@ -1,5 +1,6 @@
 package co.edu.uco.aurora.infrastructure.controller;
 
+import co.edu.uco.aurora.crosscutting.messagescatalog.MessageCatalogService; // <-- Importante
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 import co.edu.uco.aurora.features.customer.addcustomer.application.inputport.AddCustomerInputPort;
 import co.edu.uco.aurora.features.customer.addcustomer.application.inputport.dto.AddCustomerDTO;
@@ -18,24 +19,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class AddCustomerController {
 
     private final AddCustomerInputPort inputPort;
+    private final MessageCatalogService messageCatalogService; // <-- Agregado
 
-    public AddCustomerController(AddCustomerInputPort inputPort) {
+    // Inyectamos el servicio en el constructor
+    public AddCustomerController(AddCustomerInputPort inputPort, MessageCatalogService messageCatalogService) {
         this.inputPort = inputPort;
+        this.messageCatalogService = messageCatalogService;
     }
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_VENDEDOR')")
     public ResponseEntity<Response<AddCustomerDTO>> registerNewCustomer(@RequestBody AddCustomerDTO customer) {
 
-        // 1. Ejecutamos el caso de uso (si falla, lanzará AuroraException y se irá al GlobalExceptionHandler)
+        // 1. Ejecutamos el caso de uso
         inputPort.execute(customer);
 
         // 2. Si todo sale bien, preparamos la respuesta de éxito
         Response<AddCustomerDTO> responseObjectData = Response.createSuccededResponse();
 
-        // Nota: Si también quieres traducir los mensajes de éxito, podrías inyectar el MessageCatalogService aquí,
-        // o manejarlo en un interceptor. Por ahora, dejamos tu llave de éxito.
-        responseObjectData.addMessage(MessagesEnum.SUCCESS_OPERATION.name());
+        // 3. Traducimos el mensaje de éxito usando el catálogo
+        String translatedSuccessMessage = messageCatalogService.getMessageContent(MessagesEnum.SUCCESS_OPERATION);
+        responseObjectData.addMessage(translatedSuccessMessage);
 
         return new ResponseEntity<>(responseObjectData, HttpStatus.CREATED);
     }
