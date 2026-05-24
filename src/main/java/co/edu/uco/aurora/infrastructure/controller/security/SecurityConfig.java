@@ -21,6 +21,14 @@ public class SecurityConfig {
     @Value("${api.zuplo.secret}")
     private String zuploSecret;
 
+    private static final String[] SWAGGER_PATHS = {
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/**"
+    };
+
     @Bean
     @SuppressWarnings({"java:S112", "java:S1130"})
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -31,6 +39,13 @@ public class SecurityConfig {
                 .addFilterBefore((request, response, chain) -> {
                     var req = (jakarta.servlet.http.HttpServletRequest) request;
                     var res = (jakarta.servlet.http.HttpServletResponse) response;
+
+                    String path = req.getRequestURI();
+
+                    if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs") || path.startsWith("/swagger-resources") || path.startsWith("/webjars")) {
+                        chain.doFilter(request, response);
+                        return;
+                    }
 
                     String headerSecret = req.getHeader("x-zuplo-secret");
 
@@ -43,8 +58,8 @@ public class SecurityConfig {
                     chain.doFilter(request, response);
                 }, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(SWAGGER_PATHS).permitAll()
                         .requestMatchers("/api/public/**").permitAll()
-                        // AGREGAMOS TU RUTA AQUÍ PARA QUE SEA PÚBLICA TEMPORALMENTE
                         .requestMatchers("/api/v1/identification-types").permitAll()
                         .anyRequest().authenticated()
                 )

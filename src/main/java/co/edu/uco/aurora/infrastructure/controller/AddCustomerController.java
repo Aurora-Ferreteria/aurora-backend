@@ -1,10 +1,16 @@
 package co.edu.uco.aurora.infrastructure.controller;
 
-import co.edu.uco.aurora.crosscutting.messagescatalog.MessageCatalogService; // <-- Importante
+import co.edu.uco.aurora.crosscutting.messagescatalog.MessageCatalogService;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 import co.edu.uco.aurora.features.customer.addcustomer.application.inputport.AddCustomerInputPort;
 import co.edu.uco.aurora.features.customer.addcustomer.application.inputport.dto.AddCustomerDTO;
 import co.edu.uco.aurora.infrastructure.controller.dto.Response;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/customers")
+@Tag(name = "Customers (Clientes)", description = "Operaciones relacionadas con la creación y gestión de clientes")
 public class AddCustomerController {
 
     private final AddCustomerInputPort inputPort;
-    private final MessageCatalogService messageCatalogService; // <-- Agregado
+    private final MessageCatalogService messageCatalogService;
 
-    // Inyectamos el servicio en el constructor
     public AddCustomerController(AddCustomerInputPort inputPort, MessageCatalogService messageCatalogService) {
         this.inputPort = inputPort;
         this.messageCatalogService = messageCatalogService;
@@ -29,15 +35,24 @@ public class AddCustomerController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_VENDEDOR')")
+    @Operation(
+            summary = "Registrar un nuevo cliente",
+            description = "Procesa la creación de un nuevo cliente en el sistema. Requiere permisos de ADMIN o VENDEDOR.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Cliente registrado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos (Bad Request)"),
+            @ApiResponse(responseCode = "401", description = "No autorizado (Falta token JWT o es inválido)"),
+            @ApiResponse(responseCode = "403", description = "Acceso denegado (No tiene los roles requeridos)"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<Response<AddCustomerDTO>> registerNewCustomer(@RequestBody AddCustomerDTO customer) {
 
-        // 1. Ejecutamos el caso de uso
         inputPort.execute(customer);
 
-        // 2. Si todo sale bien, preparamos la respuesta de éxito
         Response<AddCustomerDTO> responseObjectData = Response.createSuccededResponse();
 
-        // 3. Traducimos el mensaje de éxito usando el catálogo
         String translatedSuccessMessage = messageCatalogService.getMessageContent(MessagesEnum.SUCCESS_OPERATION);
         responseObjectData.addMessage(translatedSuccessMessage);
 
