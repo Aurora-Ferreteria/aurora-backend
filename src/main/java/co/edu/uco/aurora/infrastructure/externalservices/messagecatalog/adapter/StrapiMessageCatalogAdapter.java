@@ -4,8 +4,12 @@ import co.edu.uco.aurora.crosscutting.messagescatalog.MessageCatalogService;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 import co.edu.uco.aurora.infrastructure.externalservices.messagecatalog.dto.StrapiMessageResponseDTO;
 import co.edu.uco.aurora.infrastructure.externalservices.messagecatalog.adapter.mapper.StrapiMessageMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import jakarta.annotation.PostConstruct;
@@ -15,68 +19,61 @@ import java.util.Map;
 
 @Component
 public class StrapiMessageCatalogAdapter implements MessageCatalogService {
-
-    // El mapa ahora tiene dos niveles: Idioma -> (Clave -> Valor)
-    private Map<String, Map<String, String>> messageCache = new HashMap<>();
     private final RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    private StringRedisTemplate redisTemplate; // Este objeto maneja la conexión
+    @PostConstruct
+    public void verificarConexion() {
+        try {
+            redisTemplate.opsForValue().set("test_aurora", "Conexion Exitosa");
+            String valor = redisTemplate.opsForValue().get("test_aurora");
+            System.out.println("[Aurora-Redis] ✅ Conexión verificada: " + valor);
+        } catch (Exception e) {
+            System.err.println("[Aurora-Redis] ❌ Error conectando a Redis: " + e.getMessage());
+        }
+    }
 
     @Value("${api.strapi.url}")
     private String strapiUrl;
 
-    @PostConstruct
-    public void initializeCache() {
-        try {
-            // Ahora strapiUrl viene limpio de Doppler. Le concatenamos TODOS los parámetros aquí.
-            String urlConPaginacion = strapiUrl + "?populate=*&publicationState=preview&pagination[pageSize]=100";
-            System.out.println("[DEBUG] Intentando conectar a: " + urlConPaginacion);
+    // 1. Este método consulta a Strapi y guarda el resultado en caché automáticamente.
+    @Cacheable(value = "messageCatalog", key = "'allMessages'")
+    public Map<String, Map<String, String>> loadAllMessagesFromStrapi() {
+        String url = strapiUrl + "?populate=*&publicationState=preview&pagination[pageSize]=100";
+        StrapiMessageResponseDTO response = restTemplate.getForObject(url, StrapiMessageResponseDTO.class);
+        return StrapiMessageMapper.toI18nCacheMap(response);
+    }
 
-            StrapiMessageResponseDTO response = restTemplate.getForObject(urlConPaginacion, StrapiMessageResponseDTO.class);
-
-            if (response != null && response.getData() != null) {
-                System.out.println("[DEBUG] Registros recibidos: " + response.getData().size());
-                this.messageCache = StrapiMessageMapper.toI18nCacheMap(response);
-                System.out.println("[Aurora] Catálogo i18n cargado exitosamente. Idiomas: " + this.messageCache.keySet());
-            } else {
-                System.out.println("[DEBUG] La respuesta de Strapi fue nula o data es nula");
-            }
-
-        } catch (Exception e) {
-            System.err.println("[Error] No se pudo cargar el catálogo de Strapi: " + e.getMessage());
-            e.printStackTrace();
-        }
+    // 2. Úsalo cuando necesites forzar la actualización de los mensajes desde Strapi.
+    @CacheEvict(value = "messageCatalog", key = "'allMessages'")
+    public void clearCache() {
+        // Al llamarlo, se vacía la caché y la próxima petición recargará todo.
     }
 
     @Override
     public String getMessageContent(MessagesEnum message) {
-        // 1. Obtener el código de idioma base (ej: "es", "en")
-        String currentLanguage = LocaleContextHolder.getLocale().getLanguage();
+        // 3. Obtenemos el mapa de la caché (automático)
+        Map<String, Map<String, String>> messageCache = loadAllMessagesFromStrapi();
 
-        // 2. Intentar buscar el mapa de mensajes para ese idioma
+        // Lógica de búsqueda (igual que antes)
+        String currentLanguage = LocaleContextHolder.getLocale().getLanguage();
         Map<String, String> localeMap = messageCache.get(currentLanguage);
 
-        // 3. Si es nulo, buscar una clave que empiece por el idioma (ej: si busca "es" y tenemos "es-CO")
         if (localeMap == null) {
             String matchingKey = messageCache.keySet().stream()
                     .filter(key -> key.startsWith(currentLanguage))
                     .findFirst()
                     .orElse(null);
-
             if (matchingKey != null) {
                 localeMap = messageCache.get(matchingKey);
             }
         }
 
-        // 4. Si sigue siendo nulo, usar el primer idioma disponible en la caché como último recurso
         if (localeMap == null && !messageCache.isEmpty()) {
             localeMap = messageCache.values().iterator().next();
         }
 
-        // 5. Retornar el mensaje o el nombre del enum si no se mapeó nada
-        if (localeMap != null) {
-            return localeMap.getOrDefault(message.name(), message.name());
-        }
-
-        return message.name();
+        return (localeMap != null) ? localeMap.getOrDefault(message.name(), message.name()) : message.name();
     }
 
     @Override
