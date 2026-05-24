@@ -5,32 +5,8 @@ public class WelcomeEmailTemplate {
     private WelcomeEmailTemplate() {
     }
 
-    public static String buildHtml(String customerName) {
-        return """
-            <!DOCTYPE html>
-            <html lang="es">
-            <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 40px 20px;">
-                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                    <div style="background-color: #5651e5; padding: 30px; text-align: center;">
-                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 1px;">¡Bienvenido a Aurora! 🛠️</h1>
-                    </div>
-                    <div style="padding: 40px 30px; color: #4a4a4a; line-height: 1.8;">
-                        <p style="font-size: 18px; margin-top: 0;">Hola <strong style="color: #5651e5;">%s</strong>,</p>
-                        <p>Nos alegra informarte que tus datos han sido registrados exitosamente en nuestro sistema de clientes. A partir de ahora, agilizaremos todas tus compras, cotizaciones y pedidos.</p>
-                        <p>En <strong>Ferretería Aurora</strong> estamos comprometidos con brindarte los mejores materiales y herramientas para que todos tus proyectos sean un éxito total.</p>
-                        <div style="background-color: #f8f9fa; border-left: 4px solid #5651e5; padding: 15px; margin: 30px 0; border-radius: 4px;">
-                            <p style="margin: 0; font-size: 15px;"><strong>¿Sabías qué?</strong> Al estar registrado en nuestro sistema, podremos ofrecerte una atención mucho más rápida y personalizada cada vez que nos visites.</p>
-                        </div>
-                        <p style="margin-bottom: 0;">¡Esperamos poder atenderte muy pronto en nuestras instalaciones!</p>
-                        <p style="margin-top: 5px;"><strong>El equipo de Ferretería Aurora</strong></p>
-                    </div>
-                    <div style="background-color: #ecf0f1; padding: 20px; text-align: center; font-size: 12px; color: #7f8c8d;">
-                        <p style="margin: 0 0 10px 0;">Este es un mensaje automático de confirmación de registro.</p>
-                        <p style="margin: 0;">&copy; 2026 Ferretería Aurora. Todos los derechos reservados.</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-            """.formatted(customerName);
+    public static String buildHtml(String htmlFromStrapi, String customerName) {
+        // Recibe el HTML completo de Strapi y solo inyecta el nombre del cliente en el %s
+        return String.format(htmlFromStrapi, customerName);
     }
 }
