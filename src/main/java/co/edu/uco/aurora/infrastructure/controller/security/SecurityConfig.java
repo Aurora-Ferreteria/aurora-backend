@@ -75,7 +75,7 @@ public class SecurityConfig {
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
         converter.setAuthoritiesClaimName("https://apiaurora/roles");
-        //converter.setAuthoritiesClaimName("permissions");
+        // converter.setAuthoritiesClaimName("permissions");
         converter.setAuthorityPrefix("ROLE_");
 
         JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
