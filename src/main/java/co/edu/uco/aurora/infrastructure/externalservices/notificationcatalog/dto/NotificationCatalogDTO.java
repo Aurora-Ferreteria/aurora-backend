@@ -1,6 +1,12 @@
+
 package co.edu.uco.aurora.infrastructure.externalservices.notificationcatalog.dto;
 
-public class NotificationCatalogDTO {
+import java.io.Serializable;
+
+public class NotificationCatalogDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private String key;
     private String value;
 

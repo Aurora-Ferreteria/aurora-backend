@@ -4,58 +4,77 @@ import co.edu.uco.aurora.crosscutting.messagescatalog.MessageCatalogService;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 import co.edu.uco.aurora.infrastructure.externalservices.messagecatalog.dto.StrapiMessageResponseDTO;
 import co.edu.uco.aurora.infrastructure.externalservices.messagecatalog.adapter.mapper.StrapiMessageMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
 import jakarta.annotation.PostConstruct;
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class StrapiMessageCatalogAdapter implements MessageCatalogService {
+
     private final RestTemplate restTemplate = new RestTemplate();
-    @Autowired
-    private StringRedisTemplate redisTemplate; // Este objeto maneja la conexión
-    @PostConstruct
-    public void verificarConexion() {
-        try {
-            redisTemplate.opsForValue().set("test_aurora", "Conexion Exitosa");
-            String valor = redisTemplate.opsForValue().get("test_aurora");
-            System.out.println("[Aurora-Redis] ✅ Conexión verificada: " + valor);
-        } catch (Exception e) {
-            System.err.println("[Aurora-Redis] ❌ Error conectando a Redis: " + e.getMessage());
-        }
-    }
+    private final CacheManager cacheManager; // 🔥 Usamos CacheManager al igual que en Notificaciones
 
     @Value("${api.strapi.url}")
     private String strapiUrl;
 
-    // 1. Este método consulta a Strapi y guarda el resultado en caché automáticamente.
-    @Cacheable(value = "messageCatalog", key = "'allMessages'")
+    public StrapiMessageCatalogAdapter(CacheManager cacheManager) {
+        this.cacheManager = cacheManager;
+    }
+    
+
+    // 1. Método que lee de Redis o va a Strapi si no hay datos
+    @SuppressWarnings("unchecked")
     public Map<String, Map<String, String>> loadAllMessagesFromStrapi() {
+        Cache redisCache = cacheManager.getCache("messageCatalog");
+
+        // Intentar leer de Redis primero
+        if (redisCache != null) {
+            Cache.ValueWrapper wrapper = redisCache.get("allMessages");
+            if (wrapper != null) {
+                return (Map<String, Map<String, String>>) wrapper.get();
+            }
+        }
+
+        // Si no está en Redis, vamos a Strapi
+        System.out.println("🔄 [Redis-Cache] Caché de mensajes vacía. Consultando a Strapi...");
         String url = strapiUrl + "?populate=*&publicationState=preview&pagination[pageSize]=100";
         StrapiMessageResponseDTO response = restTemplate.getForObject(url, StrapiMessageResponseDTO.class);
-        return StrapiMessageMapper.toI18nCacheMap(response);
+        Map<String, Map<String, String>> messagesMap = StrapiMessageMapper.toI18nCacheMap(response);
+
+        // Guardamos en Redis para la próxima vez
+        if (redisCache != null && messagesMap != null) {
+            redisCache.put("allMessages", messagesMap);
+            System.out.println("✅ Mensajes guardados en Redis con éxito.");
+        }
+
+        return messagesMap;
     }
 
-    // 2. Úsalo cuando necesites forzar la actualización de los mensajes desde Strapi.
-    @CacheEvict(value = "messageCatalog", key = "'allMessages'")
+    // 2. Método para limpiar la caché manualmente si lo necesitas
     public void clearCache() {
-        // Al llamarlo, se vacía la caché y la próxima petición recargará todo.
+        Cache redisCache = cacheManager.getCache("messageCatalog");
+        if (redisCache != null) {
+            redisCache.evict("allMessages");
+            System.out.println("🗑️ [Redis-Cache] Caché de mensajes limpiada.");
+        }
     }
 
     @Override
     public String getMessageContent(MessagesEnum message) {
-        // 3. Obtenemos el mapa de la caché (automático)
+        // 3. Ahora esta llamada sí usa la lógica del CacheManager de forma segura
         Map<String, Map<String, String>> messageCache = loadAllMessagesFromStrapi();
 
-        // Lógica de búsqueda (igual que antes)
+        if (messageCache == null || messageCache.isEmpty()) {
+            return message.name();
+        }
+
         String currentLanguage = LocaleContextHolder.getLocale().getLanguage();
         Map<String, String> localeMap = messageCache.get(currentLanguage);
 
