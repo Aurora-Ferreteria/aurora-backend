@@ -14,7 +14,6 @@ public final class StrapiMessageMapper {
 
         if (response != null && response.getData() != null) {
             response.getData().forEach(item -> {
-                // Leemos directamente de item, sin pasar por getAttributes()
                 String key = item.getKey();
                 String value = item.getValue();
                 String locale = item.getLocale();

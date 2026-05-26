@@ -34,6 +34,11 @@ public enum MessagesEnum {
     RESEND_SERVICE_SENDING_ERROR,
     ERROR_HTTP_MESSAGE_NOT_READABLE_GENERIC;
 
-    // Eliminamos el constructor con texto, el atributo message y el método getMessage().
-    // Ahora es un Enum puro que solo sirve de catálogo de llaves.
+    public String getMessage(String... params) {
+        MessageCatalogService service = MessageCatalogProvider.getService();
+        if (service == null) {
+            return this.name();
+        }
+        return service.getMessageContent(this, params);
+    }
 }

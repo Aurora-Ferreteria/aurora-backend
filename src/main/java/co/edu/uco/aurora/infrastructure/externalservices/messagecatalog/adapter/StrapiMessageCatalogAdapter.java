@@ -11,7 +11,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import jakarta.annotation.PostConstruct;
 import java.text.MessageFormat;
 import java.util.Map;
 
@@ -19,7 +18,7 @@ import java.util.Map;
 public class StrapiMessageCatalogAdapter implements MessageCatalogService {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private final CacheManager cacheManager; // 🔥 Usamos CacheManager al igual que en Notificaciones
+    private final CacheManager cacheManager;
 
     @Value("${api.strapi.url}")
     private String strapiUrl;
@@ -27,9 +26,7 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
     public StrapiMessageCatalogAdapter(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
     }
-    
 
-    // 1. Método que lee de Redis o va a Strapi si no hay datos
     @SuppressWarnings("unchecked")
     public Map<String, Map<String, String>> loadAllMessagesFromStrapi() {
         Cache redisCache = cacheManager.getCache("messageCatalog");
@@ -42,13 +39,11 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
             }
         }
 
-        // Si no está en Redis, vamos a Strapi
         System.out.println("🔄 [Redis-Cache] Caché de mensajes vacía. Consultando a Strapi...");
         String url = strapiUrl + "?populate=*&publicationState=preview&pagination[pageSize]=100";
         StrapiMessageResponseDTO response = restTemplate.getForObject(url, StrapiMessageResponseDTO.class);
         Map<String, Map<String, String>> messagesMap = StrapiMessageMapper.toI18nCacheMap(response);
 
-        // Guardamos en Redis para la próxima vez
         if (redisCache != null && messagesMap != null) {
             redisCache.put("allMessages", messagesMap);
             System.out.println("✅ Mensajes guardados en Redis con éxito.");
@@ -57,7 +52,6 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
         return messagesMap;
     }
 
-    // 2. Método para limpiar la caché manualmente si lo necesitas
     public void clearCache() {
         Cache redisCache = cacheManager.getCache("messageCatalog");
         if (redisCache != null) {
@@ -68,7 +62,6 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
 
     @Override
     public String getMessageContent(MessagesEnum message) {
-        // 3. Ahora esta llamada sí usa la lógica del CacheManager de forma segura
         Map<String, Map<String, String>> messageCache = loadAllMessagesFromStrapi();
 
         if (messageCache == null || messageCache.isEmpty()) {
