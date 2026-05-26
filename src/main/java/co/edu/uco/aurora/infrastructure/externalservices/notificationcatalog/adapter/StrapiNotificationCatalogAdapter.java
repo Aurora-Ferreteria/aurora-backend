@@ -4,49 +4,89 @@ import co.edu.uco.aurora.infrastructure.externalservices.notificationcatalog.Not
 import co.edu.uco.aurora.infrastructure.externalservices.notificationcatalog.adapter.mapper.StrapiNotificationMapper;
 import co.edu.uco.aurora.infrastructure.externalservices.notificationcatalog.dto.NotificationCatalogDTO;
 import co.edu.uco.aurora.infrastructure.externalservices.notificationcatalog.dto.StrapiNotificationResponseDTO;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate; // O el cliente que estés usando
+import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class StrapiNotificationCatalogAdapter implements NotificationCatalog {
 
-    private final Map<String, NotificationCatalogDTO> cache = new ConcurrentHashMap<>();
-
     private final RestTemplate restTemplate;
     private final StrapiNotificationMapper mapper;
+    private final CacheManager cacheManager; // 🔥 Inyectamos el manejador de caché oficial de Spring
 
-    // NOTA: Para Strapi 5, si quieres asegurar que traiga más de 25 registros, puedes añadir '?pagination[limit]=100' al final de la URL
     private final String STRAPI_URL = "https://magical-positivity-b27a86edda.strapiapp.com/api/notifications?pagination[limit]=100";
 
-    public StrapiNotificationCatalogAdapter(RestTemplate restTemplate, StrapiNotificationMapper mapper) {
+    // Modificamos el constructor para recibir el CacheManager
+    public StrapiNotificationCatalogAdapter(RestTemplate restTemplate, StrapiNotificationMapper mapper, CacheManager cacheManager) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
+        this.cacheManager = cacheManager;
     }
 
     @Override
     public void loadCatalog() {
         try {
+            System.out.println("🔄 [Redis-Cache] Cargando catálogo fresco desde Strapi...");
             StrapiNotificationResponseDTO response = restTemplate.getForObject(STRAPI_URL, StrapiNotificationResponseDTO.class);
 
             if (response != null && response.getData() != null) {
-                cache.clear();
+                Map<String, NotificationCatalogDTO> tempMap = new HashMap<>();
+
                 response.getData().forEach(data -> {
                     NotificationCatalogDTO dto = mapper.toCatalogDto(data);
-                    cache.put(dto.getKey(), dto);
+                    tempMap.put(dto.getKey(), dto);
                 });
-                System.out.println("✅ Catálogo de Notificaciones v5 cargado. Total: " + cache.size());
+
+                // 💾 GUARDAR EN REDIS: Extraemos el contenedor y guardamos el mapa completo
+                Cache redisCache = cacheManager.getCache("notificationsCache");
+                if (redisCache != null) {
+                    redisCache.put("allNotifications", tempMap);
+                }
+
+                System.out.println("✅ Catálogo de Notificaciones v5 guardado con éxito en Redis. Total: " + tempMap.size());
             }
         } catch (Exception e) {
             System.err.println("❌ Error cargando catálogo de Strapi: " + e.getMessage());
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Optional<NotificationCatalogDTO> getNotificationByKey(String key) {
-        return Optional.ofNullable(cache.get(key));
+        // 🔎 LEER DE REDIS: Intentamos recuperar el mapa del catálogo
+        Cache redisCache = cacheManager.getCache("notificationsCache");
+
+        if (redisCache != null) {
+            Cache.ValueWrapper wrapper = redisCache.get("allNotifications");
+            if (wrapper != null) {
+                Map<String, NotificationCatalogDTO> cachedMap = (Map<String, NotificationCatalogDTO>) wrapper.get();
+                if (cachedMap != null) {
+                    return Optional.ofNullable(cachedMap.get(key));
+                }
+            }
+        }
+
+        // 🛡️ Resiliencia: Si por algún motivo Redis se reinició o está vacío, disparamos la carga manual
+        System.out.println("⚠️ [Redis-Cache] La caché estaba vacía al solicitar la llave: " + key + ". Forzando recarga...");
+        this.loadCatalog();
+
+        // Volvemos a intentar leer tras la recarga de emergencia
+        if (redisCache != null) {
+            Cache.ValueWrapper wrapper = redisCache.get("allNotifications");
+            if (wrapper != null) {
+                Map<String, NotificationCatalogDTO> cachedMap = (Map<String, NotificationCatalogDTO>) wrapper.get();
+                if (cachedMap != null) {
+                    return Optional.ofNullable(cachedMap.get(key));
+                }
+            }
+        }
+
+        return Optional.empty();
     }
 }
