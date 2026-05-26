@@ -13,7 +13,6 @@ public class WelcomeEmailTemplate {
     }
 
     public String buildHtml(String customerName) {
-        // 1. Extraemos todos los textos de la caché (Strapi)
         String headerTitle = getMessage("WELCOME_EMAIL_HEADER_TITLE");
         String companyName = getMessage("COMPANY_NAME");
         String commitment = getMessage("WELCOME_EMAIL_COMMITMENT_TEXT");
@@ -24,7 +23,6 @@ public class WelcomeEmailTemplate {
         String footerWarning = getMessage("WELCOME_EMAIL_FOOTER_WARNING");
         String footerCopyright = getMessage("WELCOME_EMAIL_FOOTER_COPYRIGHT");
 
-        // 2. Inyectamos las variables en el HTML preservando el diseño
         return """
             <!DOCTYPE html>
             <html lang="es">
@@ -56,7 +54,6 @@ public class WelcomeEmailTemplate {
         );
     }
 
-    // Método auxiliar privado para buscar las llaves más fácilmente
     private String getMessage(String key) {
         return notificationCatalog.getNotificationByKey(key)
                 .orElseThrow(() -> new RuntimeException("Falta la configuración en Strapi para la llave: " + key))

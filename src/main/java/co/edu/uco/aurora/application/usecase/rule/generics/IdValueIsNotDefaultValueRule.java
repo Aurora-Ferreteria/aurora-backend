@@ -3,7 +3,6 @@ package co.edu.uco.aurora.application.usecase.rule.generics;
 import co.edu.uco.aurora.application.usecase.rule.Rule;
 import co.edu.uco.aurora.crosscutting.exception.AuroraException;
 import co.edu.uco.aurora.crosscutting.helper.ObjectHelper;
-import co.edu.uco.aurora.crosscutting.helper.TextHelper;
 import co.edu.uco.aurora.crosscutting.helper.UUIDHelper;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 
@@ -25,32 +24,30 @@ public final class IdValueIsNotDefaultValueRule implements Rule {
     public void execute(Object... data) {
 
         if (ObjectHelper.isNull(data)) {
-            var userMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_IS_NULL.name();
-            throw AuroraException.create(userMessage);
+            throw AuroraException.create(
+                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_IS_NULL.getMessage()
+            );
         }
 
         if (data.length < 2) {
-            var userMessage = MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_LENGTH_INVALID.name();
-            throw AuroraException.create(userMessage);
+            throw AuroraException.create(
+                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_DATA_LENGTH_INVALID.getMessage()
+            );
         }
 
         var uuid = (UUID) data[0];
         var dataName = (String) data[1];
 
         if (ObjectHelper.isNull(uuid)) {
-            var userMessage = TextHelper.format(
-                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_NULL.name(),
-                    dataName
+            throw AuroraException.create(
+                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_NULL.getMessage(dataName)
             );
-            throw AuroraException.create(userMessage);
         }
 
         if (UUIDHelper.isDefaultUUID(uuid)) {
-            var userMessage = TextHelper.format(
-                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_DEFAULT.name(),
-                    dataName
+            throw AuroraException.create(
+                    MessagesEnum.ID_VALUE_IS_NOT_DEFAULT_RULE_UUID_IS_DEFAULT.getMessage(dataName)
             );
-            throw AuroraException.create(userMessage);
         }
     }
 }
