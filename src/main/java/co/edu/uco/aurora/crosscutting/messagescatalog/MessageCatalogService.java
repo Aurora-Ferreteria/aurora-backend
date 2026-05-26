@@ -7,4 +7,5 @@ public interface MessageCatalogService {
 
     // Obtiene el mensaje reemplazando los parámetros {0}, {1}, etc.
     String getMessageContent(MessagesEnum message, String... params);
+
 }

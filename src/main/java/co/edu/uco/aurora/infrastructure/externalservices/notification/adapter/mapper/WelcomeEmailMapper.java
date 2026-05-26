@@ -11,9 +11,18 @@ public class WelcomeEmailMapper {
     private static final String SENDER = "Ferretería Aurora <administradores@aurorajpkd.com>";
     private static final String SUBJECT = "¡Estás registrado en Ferretería Aurora! 🛠️";
 
+    // 1. Declaramos el template como una dependencia
+    private final WelcomeEmailTemplate template;
+
+    // 2. Lo inyectamos a través del constructor
+    public WelcomeEmailMapper(WelcomeEmailTemplate template) {
+        this.template = template;
+    }
+
     public CreateEmailOptions toResendOptions(WelcomeEmailDTO dto) {
 
-        String htmlBody = WelcomeEmailTemplate.buildHtml(dto.getCustomerName());
+        // 3. Llamamos al método usando la instancia inyectada (minúscula), no la clase (mayúscula)
+        String htmlBody = template.buildHtml(dto.getCustomerName());
 
         return CreateEmailOptions.builder()
                 .from(SENDER)
