@@ -14,10 +14,9 @@ public class TextHelperInitializer {
     }
 
     @PostConstruct
-    public void initVariables() {
-        TextHelper.EMAIL_REGEX = parameterCatalog.getParameterValue("EMAIL_REGEX");
-        TextHelper.PHONE_REGEX = parameterCatalog.getParameterValue("PHONE_REGEX");
-        TextHelper.NAME_REGEX = parameterCatalog.getParameterValue("NAME_REGEX");
-        TextHelper.ID_NUMBER_REGEX = parameterCatalog.getParameterValue("ID_NUMBER_REGEX");
+    public void init() {
+        // Solo le pasamos la referencia al catálogo.
+        // TextHelper ya no guarda el String; lo pedirá dinámicamente.
+        TextHelper.setParameterCatalog(parameterCatalog);
     }
 }

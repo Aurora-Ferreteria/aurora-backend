@@ -18,7 +18,7 @@ public final class ValidateCustomerPhoneNumber {
         StringValuesIsPresentRule.executeRule(sanitizedPhone, FIELD_NAME, true);
         StringLengthValuesIsValidRule.executeRule(sanitizedPhone, FIELD_NAME, 7, 20, true);
 
-        StringFormatValueIsValidRule.executeRule(sanitizedPhone, FIELD_NAME, TextHelper.PHONE_REGEX, true);
+        StringFormatValueIsValidRule.executeRule(sanitizedPhone, FIELD_NAME, TextHelper.getPhoneRegex(), true);
 
         return sanitizedPhone;
     }

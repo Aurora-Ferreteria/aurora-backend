@@ -1,23 +1,44 @@
 package co.edu.uco.aurora.crosscutting.helper;
 
+import co.edu.uco.aurora.infrastructure.externalservices.parametercatalog.ParameterCatalog;
 import java.text.MessageFormat;
 import java.util.regex.Pattern;
 
 public final class TextHelper {
 
-    public static String EMAIL_REGEX;
-    public static String PHONE_REGEX;
-    public static String NAME_REGEX;
-    public static String ID_NUMBER_REGEX;
+    // Ya no son Strings estáticos con valor fijo
+    // sino acceso dinámico vía el catálogo
+    private static ParameterCatalog parameterCatalog;
 
     private static final String EMPTY = "";
 
-    private TextHelper() {
+    private TextHelper() {}
+
+    // Spring llamará esto al inicializar el componente wrapper
+    public static void setParameterCatalog(ParameterCatalog catalog) {
+        TextHelper.parameterCatalog = catalog;
     }
 
-    public static String getDefault() {
-        return EMPTY;
+    // Getters dinámicos — cada vez que se llamen, van al cache (o recargan si está vacío)
+    public static String getEmailRegex() {
+        return parameterCatalog != null ? parameterCatalog.getParameterValue("EMAIL_REGEX") : null;
     }
+
+    public static String getPhoneRegex() {
+        return parameterCatalog != null ? parameterCatalog.getParameterValue("PHONE_REGEX") : null;
+    }
+
+    public static String getNameRegex() {
+        return parameterCatalog != null ? parameterCatalog.getParameterValue("NAME_REGEX") : null;
+    }
+
+    public static String getIdNumberRegex() {
+        return parameterCatalog != null ? parameterCatalog.getParameterValue("ID_NUMBER_REGEX") : null;
+    }
+
+    // --- El resto de métodos sin cambios ---
+
+    public static String getDefault() { return EMPTY; }
 
     public static String getDefault(final String value) {
         return ObjectHelper.getDefault(value, getDefault());
@@ -36,23 +57,17 @@ public final class TextHelper {
     }
 
     public static boolean lengthIsValid(final String value, final int min, final int max, final boolean mustApplyTrim) {
-        var length = (mustApplyTrim
-                ? getDefaultWithTrim(value)
-                : getDefault(value)).length();
+        var length = (mustApplyTrim ? getDefaultWithTrim(value) : getDefault(value)).length();
         return length >= min && length <= max;
     }
 
     public static boolean matchesRegex(final String text, final String regex) {
-        if (isEmpty(text) || isEmpty(regex)) {
-            return false;
-        }
+        if (isEmpty(text) || isEmpty(regex)) return false;
         return Pattern.matches(regex, text);
     }
 
     public static String format(final String message, final String... params) {
-        if (isEmpty(message)) {
-            return getDefault();
-        }
+        if (isEmpty(message)) return getDefault();
         return MessageFormat.format(message, (Object[]) params);
     }
 }

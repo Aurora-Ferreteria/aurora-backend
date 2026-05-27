@@ -31,7 +31,6 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
     public Map<String, Map<String, String>> loadAllMessagesFromStrapi() {
         Cache redisCache = cacheManager.getCache("messageCatalog");
 
-        // Intentar leer de Redis primero
         if (redisCache != null) {
             Cache.ValueWrapper wrapper = redisCache.get("allMessages");
             if (wrapper != null) {
