@@ -56,7 +56,7 @@ public class AddCustomerUseCaseImpl implements AddCustomerUseCase {
 
         CustomerEntity customerEntity = mapper.toEntity(data);
 
-        customerEntity.setId(UUID.randomUUID());
+        customerEntity.setId(generateUniqueId());
 
         customerRepository.create(customerEntity);
 
@@ -74,5 +74,15 @@ public class AddCustomerUseCaseImpl implements AddCustomerUseCase {
         }
 
         return null;
+    }
+
+    private UUID generateUniqueId() {
+        UUID id = UUID.randomUUID();
+
+        while (customerRepository.existsById(id)) {
+            id = UUID.randomUUID();
+        }
+
+        return id;
     }
 }
