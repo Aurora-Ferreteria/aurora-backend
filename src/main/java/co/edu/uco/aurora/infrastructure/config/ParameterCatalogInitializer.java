@@ -15,7 +15,6 @@ public class ParameterCatalogInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Al encender la app, descarga las expresiones regulares y las guarda en Redis
         parameterCatalog.loadParameters();
     }
 }

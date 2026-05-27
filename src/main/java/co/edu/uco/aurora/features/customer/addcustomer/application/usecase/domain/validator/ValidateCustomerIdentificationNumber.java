@@ -18,7 +18,7 @@ public final class ValidateCustomerIdentificationNumber {
         StringValuesIsPresentRule.executeRule(sanitizedIdNumber, FIELD_NAME, true);
         StringLengthValuesIsValidRule.executeRule(sanitizedIdNumber, FIELD_NAME, 6, 25, true);
 
-        StringFormatValueIsValidRule.executeRule(sanitizedIdNumber, FIELD_NAME, TextHelper.ID_NUMBER_REGEX, true);
+        StringFormatValueIsValidRule.executeRule(sanitizedIdNumber, FIELD_NAME, TextHelper.getIdNumberRegex(), true);
 
         return sanitizedIdNumber;
     }

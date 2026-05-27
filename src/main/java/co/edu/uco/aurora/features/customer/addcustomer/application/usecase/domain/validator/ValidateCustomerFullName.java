@@ -18,7 +18,7 @@ public final class ValidateCustomerFullName {
         StringValuesIsPresentRule.executeRule(sanitizedName, FIELD_NAME, true);
         StringLengthValuesIsValidRule.executeRule(sanitizedName, FIELD_NAME, 3, 100, true);
 
-        StringFormatValueIsValidRule.executeRule(sanitizedName, FIELD_NAME, TextHelper.NAME_REGEX, true);
+        StringFormatValueIsValidRule.executeRule(sanitizedName, FIELD_NAME, TextHelper.getNameRegex(), true);
 
         return sanitizedName;
     }

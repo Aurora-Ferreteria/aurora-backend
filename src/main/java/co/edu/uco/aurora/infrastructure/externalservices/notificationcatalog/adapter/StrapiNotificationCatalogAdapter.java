@@ -22,7 +22,6 @@ public class StrapiNotificationCatalogAdapter implements NotificationCatalog {
 
     private final String STRAPI_URL = "https://magical-positivity-b27a86edda.strapiapp.com/api/notifications?pagination[limit]=100";
 
-    // Modificamos el constructor para recibir el CacheManager
     public StrapiNotificationCatalogAdapter(RestTemplate restTemplate, StrapiNotificationMapper mapper, CacheManager cacheManager) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
@@ -43,7 +42,6 @@ public class StrapiNotificationCatalogAdapter implements NotificationCatalog {
                     tempMap.put(dto.getKey(), dto);
                 });
 
-                // 💾 GUARDAR EN REDIS: Extraemos el contenedor y guardamos el mapa completo
                 Cache redisCache = cacheManager.getCache("notificationsCache");
                 if (redisCache != null) {
                     redisCache.put("allNotifications", tempMap);
@@ -72,11 +70,9 @@ public class StrapiNotificationCatalogAdapter implements NotificationCatalog {
             }
         }
 
-        // 🛡️ Resiliencia: Si por algún motivo Redis se reinició o está vacío, disparamos la carga manual
         System.out.println("⚠️ [Redis-Cache] La caché estaba vacía al solicitar la llave: " + key + ". Forzando recarga...");
         this.loadCatalog();
 
-        // Volvemos a intentar leer tras la recarga de emergencia
         if (redisCache != null) {
             Cache.ValueWrapper wrapper = redisCache.get("allNotifications");
             if (wrapper != null) {
