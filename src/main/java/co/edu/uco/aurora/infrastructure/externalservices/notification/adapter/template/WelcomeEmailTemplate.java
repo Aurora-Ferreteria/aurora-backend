@@ -13,10 +13,10 @@ public class WelcomeEmailTemplate {
     }
 
     public String buildHtml(String customerName) {
-        // Obtenemos los mensajes de Strapi
+
         String headerTitle = getMessage("WELCOME_EMAIL_HEADER_TITLE");
-        String greeting = getMessage("WELCOME_EMAIL_GREETING"); // NUEVO
-        String bodyText = getMessage("WELCOME_EMAIL_BODY_TEXT"); // NUEVO
+        String greeting = getMessage("WELCOME_EMAIL_GREETING");
+        String bodyText = getMessage("WELCOME_EMAIL_BODY_TEXT");
         String companyName = getMessage("COMPANY_NAME");
         String commitment = getMessage("WELCOME_EMAIL_COMMITMENT_TEXT");
         String dykTitle = getMessage("WELCOME_EMAIL_DID_YOU_KNOW_TITLE");
