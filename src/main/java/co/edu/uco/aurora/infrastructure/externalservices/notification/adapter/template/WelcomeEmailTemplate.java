@@ -26,7 +26,6 @@ public class WelcomeEmailTemplate {
         String footerWarning = getMessage("WELCOME_EMAIL_FOOTER_WARNING");
         String footerCopyright = getMessage("WELCOME_EMAIL_FOOTER_COPYRIGHT");
 
-        // Reemplazamos los textos estáticos por %s
         return """
             <!DOCTYPE html>
             <html>

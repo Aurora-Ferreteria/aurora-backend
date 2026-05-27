@@ -1,7 +1,6 @@
 package co.edu.uco.aurora.infrastructure.externalservices.notification.adapter;
 
 import co.edu.uco.aurora.crosscutting.exception.AuroraException;
-import co.edu.uco.aurora.crosscutting.helper.TextHelper;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 import co.edu.uco.aurora.infrastructure.externalservices.notification.WelcomeEmailSender;
 import co.edu.uco.aurora.infrastructure.externalservices.notification.adapter.mapper.WelcomeEmailMapper;
@@ -34,7 +33,7 @@ public class ResendWelcomeEmailAdapter implements WelcomeEmailSender {
 
             resend.emails().send(options);
 
-        } catch (Exception e) {
+        } catch (Exception _) {
             var userMessage = MessagesEnum.RESEND_SERVICE_SENDING_ERROR.name();
             throw AuroraException.create(userMessage);
         }

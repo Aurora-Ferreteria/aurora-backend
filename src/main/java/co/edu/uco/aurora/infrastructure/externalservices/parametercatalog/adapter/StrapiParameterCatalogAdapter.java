@@ -4,21 +4,31 @@ import co.edu.uco.aurora.infrastructure.externalservices.parametercatalog.Parame
 import co.edu.uco.aurora.infrastructure.externalservices.parametercatalog.adapter.mapper.StrapiParameterMapper;
 import co.edu.uco.aurora.infrastructure.externalservices.parametercatalog.dto.ParameterCatalogDTO;
 import co.edu.uco.aurora.infrastructure.externalservices.parametercatalog.dto.StrapiParameterResponseDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.Map;
 
 @Service
 public class StrapiParameterCatalogAdapter implements ParameterCatalog {
 
+    private static final Logger log = LoggerFactory.getLogger(StrapiParameterCatalogAdapter.class);
+
+    private static final String CACHE_NAME = "parameterCache";
+    private static final String CACHE_KEY = "allParameters";
+
     private final RestTemplate restTemplate;
     private final StrapiParameterMapper mapper;
     private final CacheManager cacheManager;
 
-    private final String STRAPI_URL = "https://popular-nest-1d97439245.strapiapp.com/api/parameters?pagination[limit]=100";
+    @Value("${api.strapi.parameters.url}")
+    private String strapiParametersUrl;
 
     public StrapiParameterCatalogAdapter(RestTemplate restTemplate,
                                          StrapiParameterMapper mapper,
@@ -31,43 +41,44 @@ public class StrapiParameterCatalogAdapter implements ParameterCatalog {
     @Override
     public Map<String, ParameterCatalogDTO> loadParameters() {
         try {
-            System.out.println("⚠️ [Redis-Cache] Caché de parámetros vacía. Forzando recarga desde Strapi...");
-            StrapiParameterResponseDTO response = restTemplate.getForObject(STRAPI_URL, StrapiParameterResponseDTO.class);
+            log.warn("⚠️ [Redis-Cache] Caché de parámetros vacía. Forzando recarga desde Strapi...");
+            StrapiParameterResponseDTO response = restTemplate.getForObject(strapiParametersUrl, StrapiParameterResponseDTO.class);
 
             if (response == null) {
-                System.err.println("❌ Respuesta de Strapi vacía para Parámetros.");
-                return null;
+                log.error("❌ Respuesta de Strapi vacía para Parámetros.");
+                return Collections.emptyMap();
             }
 
             Map<String, ParameterCatalogDTO> parameterMap = mapper.toMap(response);
 
-            Cache cache = cacheManager.getCache("parameterCache");
+            Cache cache = cacheManager.getCache(CACHE_NAME);
             if (cache != null && parameterMap != null) {
-                cache.put("allParameters", parameterMap);
-                System.out.println("✅ Parámetros guardados en Redis con éxito. Total: " + parameterMap.size());
+                cache.put(CACHE_KEY, parameterMap);
+                log.info("✅ Parámetros guardados en Redis con éxito. Total: {}", parameterMap.size());
             }
 
-            return parameterMap;
+            return parameterMap != null ? parameterMap : Collections.emptyMap();
+
         } catch (Exception e) {
-            System.err.println("❌ Error crítico al inicializar el catálogo de parámetros desde Strapi: " + e.getMessage());
-            return null;
+            log.error("❌ Error crítico al inicializar el catálogo de parámetros desde Strapi: {}", e.getMessage());
+            return Collections.emptyMap();
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public String getParameterValue(String key) {
-        Cache cache = cacheManager.getCache("parameterCache");
+        Cache cache = cacheManager.getCache(CACHE_NAME);
         Map<String, ParameterCatalogDTO> parameterMap = null;
 
         if (cache != null) {
-            Cache.ValueWrapper wrapper = cache.get("allParameters");
+            Cache.ValueWrapper wrapper = cache.get(CACHE_KEY);
             if (wrapper != null) {
                 parameterMap = (Map<String, ParameterCatalogDTO>) wrapper.get();
             }
         }
 
-        if (parameterMap == null) {
+        if (parameterMap == null || parameterMap.isEmpty()) {
             parameterMap = loadParameters();
         }
 

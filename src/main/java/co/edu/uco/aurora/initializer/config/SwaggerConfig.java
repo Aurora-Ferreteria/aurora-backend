@@ -1,4 +1,4 @@
-package co.edu.uco.aurora.infrastructure.controller.security; // Ajusta el paquete según necesites
+package co.edu.uco.aurora.initializer.config; // Ajusta el paquete según necesites
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

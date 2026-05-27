@@ -4,6 +4,8 @@ import co.edu.uco.aurora.crosscutting.messagescatalog.MessageCatalogService;
 import co.edu.uco.aurora.crosscutting.messagescatalog.MessagesEnum;
 import co.edu.uco.aurora.infrastructure.externalservices.messagecatalog.dto.StrapiMessageResponseDTO;
 import co.edu.uco.aurora.infrastructure.externalservices.messagecatalog.adapter.mapper.StrapiMessageMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -19,11 +21,16 @@ import java.util.Map;
 @Component
 public class StrapiMessageCatalogAdapter implements MessageCatalogService {
 
+    private static final Logger log = LoggerFactory.getLogger(StrapiMessageCatalogAdapter.class);
+
+    private static final String ALL_MESSAGES_KEY = "allMessages";
+    private static final String CACHE_NAME = "messageCatalog";
+
     private final RestTemplate restTemplate = new RestTemplate();
     private final CacheManager cacheManager;
 
-    @Value("${api.strapi.url}")
-    private String strapiUrl;
+    @Value("${api.strapi.messages.url}")
+    private String strapiMessagesUrl;
 
     public StrapiMessageCatalogAdapter(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
@@ -31,49 +38,49 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
 
     @SuppressWarnings("unchecked")
     public Map<String, Map<String, String>> loadAllMessagesFromStrapi() {
-        Cache redisCache = cacheManager.getCache("messageCatalog");
+        Cache redisCache = cacheManager.getCache(CACHE_NAME);
 
         if (redisCache != null) {
-            Cache.ValueWrapper wrapper = redisCache.get("allMessages");
+            Cache.ValueWrapper wrapper = redisCache.get(ALL_MESSAGES_KEY);
             if (wrapper != null) {
                 return (Map<String, Map<String, String>>) wrapper.get();
             }
         }
 
-        System.out.println("🔄 [Redis-Cache] Caché de mensajes vacía. Consultando a Strapi por locale...");
+        log.info("🔄 [Redis-Cache] Caché de mensajes vacía. Consultando a Strapi por locale...");
 
         Map<String, Map<String, String>> finalMessagesMap = new HashMap<>();
 
         try {
             for (String locale : List.of("es", "en")) {
-                String url = strapiUrl + "?pagination[pageSize]=100&locale=" + locale;
+                String url = strapiMessagesUrl + "?pagination[pageSize]=100&locale=" + locale;
                 StrapiMessageResponseDTO response = restTemplate.getForObject(url, StrapiMessageResponseDTO.class);
 
                 Map<String, Map<String, String>> partialMap = StrapiMessageMapper.toI18nCacheMap(response);
 
                 if (partialMap != null && !partialMap.isEmpty()) {
                     finalMessagesMap.putAll(partialMap);
-                    System.out.println("✅ Mensajes de sistema [" + locale + "] cargados.");
+                    log.info("✅ Mensajes de sistema [{}] cargados.", locale);
                 }
             }
 
             if (redisCache != null && !finalMessagesMap.isEmpty()) {
-                redisCache.put("allMessages", finalMessagesMap);
-                System.out.println("✅ Todos los mensajes guardados en Redis con éxito. Locales: " + finalMessagesMap.keySet());
+                redisCache.put(ALL_MESSAGES_KEY, finalMessagesMap);
+                log.info("✅ Todos los mensajes guardados en Redis con éxito. Locales: {}", finalMessagesMap.keySet());
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Error cargando mensajes de Strapi: " + e.getMessage());
+            log.error("❌ Error cargando mensajes de Strapi: {}", e.getMessage());
         }
 
         return finalMessagesMap;
     }
 
     public void clearCache() {
-        Cache redisCache = cacheManager.getCache("messageCatalog");
+        Cache redisCache = cacheManager.getCache(CACHE_NAME);
         if (redisCache != null) {
-            redisCache.evict("allMessages");
-            System.out.println("🗑️ [Redis-Cache] Caché de mensajes limpiada forzosamente.");
+            redisCache.evict(ALL_MESSAGES_KEY);
+            log.info("🗑️ [Redis-Cache] Caché de mensajes limpiada forzosamente.");
         }
     }
 
@@ -82,11 +89,10 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
         String currentLanguage = LocaleContextHolder.getLocale().getLanguage();
         Map<String, Map<String, String>> messageCache = loadAllMessagesFromStrapi();
 
-        // 🛠️ TU NUEVA LÓGICA: Si el caché tiene datos, pero NO contiene el idioma que pide el Header...
         if (messageCache != null && !messageCache.isEmpty() && !messageCache.containsKey(currentLanguage)) {
-            System.out.println("⚠️ [Redis-Cache] El idioma '" + currentLanguage + "' no existe en el caché actual. ¡Datos desactualizados detectados!");
-            clearCache(); // Vaciamos el "allMessages" viejo de Redis
-            messageCache = loadAllMessagesFromStrapi(); // Forzamos la recarga bilingüe desde Strapi
+            log.warn("⚠️ [Redis-Cache] El idioma '{}' no existe en el caché actual. ¡Datos desactualizados detectados!", currentLanguage);
+            clearCache();
+            messageCache = loadAllMessagesFromStrapi();
         }
 
         if (messageCache == null || messageCache.isEmpty()) {
@@ -117,7 +123,7 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
         String pattern = getMessageContent(message);
         try {
             return MessageFormat.format(pattern, (Object[]) params);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             return pattern;
         }
     }

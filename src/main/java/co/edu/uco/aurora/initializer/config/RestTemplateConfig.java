@@ -1,4 +1,4 @@
-package co.edu.uco.aurora.infrastructure.config;
+package co.edu.uco.aurora.initializer.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

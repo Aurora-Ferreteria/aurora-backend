@@ -1,4 +1,4 @@
-package co.edu.uco.aurora.infrastructure.controller.config;
+package co.edu.uco.aurora.initializer.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +15,10 @@ public class LocaleConfig {
     public LocaleResolver localeResolver() {
         AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
         resolver.setSupportedLocales(List.of(
-                new Locale("es"),
-                new Locale("en")
+                Locale.of("es"),
+                Locale.of("en")
         ));
-        resolver.setDefaultLocale(new Locale("es")); // fallback si no viene header
+        resolver.setDefaultLocale(Locale.of("es"));
         return resolver;
     }
 }
