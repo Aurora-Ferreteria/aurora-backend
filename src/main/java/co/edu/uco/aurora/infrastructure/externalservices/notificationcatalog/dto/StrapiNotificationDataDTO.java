@@ -2,11 +2,10 @@ package co.edu.uco.aurora.infrastructure.externalservices.notificationcatalog.dt
 
 public class StrapiNotificationDataDTO {
     private Long id;
-    private String documentId; // Strapi 5 usa esto como identificador principal
-    private String key;        // Tu campo personalizado
-    private String value;      // Tu campo personalizado
+    private String documentId;
+    private String key;
+    private String value;
 
-    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getDocumentId() { return documentId; }

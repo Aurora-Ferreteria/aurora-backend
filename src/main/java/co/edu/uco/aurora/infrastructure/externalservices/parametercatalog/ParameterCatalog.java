@@ -1,10 +1,11 @@
 package co.edu.uco.aurora.infrastructure.externalservices.parametercatalog;
 
+import co.edu.uco.aurora.infrastructure.externalservices.parametercatalog.dto.ParameterCatalogDTO;
+import java.util.Map;
+
 public interface ParameterCatalog {
 
-    // Método para forzar la carga desde Strapi a Redis
-    void loadParameters();
+    Map<String, ParameterCatalogDTO> loadParameters();
 
-    // Método que usará tu sistema para pedir la expresión regular pasándole el KEY (ej: "EMAIL_REGEX")
     String getParameterValue(String key);
 }
