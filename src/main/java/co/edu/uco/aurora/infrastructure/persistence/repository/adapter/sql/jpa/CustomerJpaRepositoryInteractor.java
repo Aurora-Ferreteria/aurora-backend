@@ -82,4 +82,9 @@ public class CustomerJpaRepositoryInteractor implements CustomerRepository {
     public boolean existsByEmail(String email) {
         return repository.existsByEmail(email);
     }
+
+    @Override
+    public boolean existsById(UUID id) {
+        return repository.existsById(id);
+    }
 }
