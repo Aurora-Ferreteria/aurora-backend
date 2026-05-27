@@ -13,7 +13,10 @@ public class WelcomeEmailTemplate {
     }
 
     public String buildHtml(String customerName) {
+        // Obtenemos los mensajes de Strapi
         String headerTitle = getMessage("WELCOME_EMAIL_HEADER_TITLE");
+        String greeting = getMessage("WELCOME_EMAIL_GREETING"); // NUEVO
+        String bodyText = getMessage("WELCOME_EMAIL_BODY_TEXT"); // NUEVO
         String companyName = getMessage("COMPANY_NAME");
         String commitment = getMessage("WELCOME_EMAIL_COMMITMENT_TEXT");
         String dykTitle = getMessage("WELCOME_EMAIL_DID_YOU_KNOW_TITLE");
@@ -23,17 +26,18 @@ public class WelcomeEmailTemplate {
         String footerWarning = getMessage("WELCOME_EMAIL_FOOTER_WARNING");
         String footerCopyright = getMessage("WELCOME_EMAIL_FOOTER_COPYRIGHT");
 
+        // Reemplazamos los textos estáticos por %s
         return """
             <!DOCTYPE html>
-            <html lang="es">
+            <html>
             <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 40px 20px;">
                 <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
                     <div style="background-color: #5651e5; padding: 30px; text-align: center;">
                         <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 1px;">%s</h1>
                     </div>
                     <div style="padding: 40px 30px; color: #4a4a4a; line-height: 1.8;">
-                        <p style="font-size: 18px; margin-top: 0;">Hola <strong style="color: #5651e5;">%s</strong>,</p>
-                        <p>Nos alegra informarte que tus datos han sido registrados exitosamente en nuestro sistema de clientes. A partir de ahora, agilizaremos todas tus compras, cotizaciones y pedidos.</p>
+                        <p style="font-size: 18px; margin-top: 0;">%s <strong style="color: #5651e5;">%s</strong>,</p>
+                        <p>%s</p>
                         <p>En <strong>%s</strong> %s</p>
                         <div style="background-color: #f8f9fa; border-left: 4px solid #5651e5; padding: 15px; margin: 30px 0; border-radius: 4px;">
                             <p style="margin: 0; font-size: 15px;"><strong>%s</strong> %s</p>
@@ -49,7 +53,10 @@ public class WelcomeEmailTemplate {
             </body>
             </html>
             """.formatted(
-                headerTitle, customerName, companyName, commitment,
+                headerTitle,
+                greeting, customerName,
+                bodyText,
+                companyName, commitment,
                 dykTitle, dykText, farewell, signature, footerWarning, footerCopyright
         );
     }

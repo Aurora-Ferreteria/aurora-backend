@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -38,36 +40,59 @@ public class StrapiMessageCatalogAdapter implements MessageCatalogService {
             }
         }
 
-        System.out.println("🔄 [Redis-Cache] Caché de mensajes vacía. Consultando a Strapi...");
-        String url = strapiUrl + "?populate=*&publicationState=preview&pagination[pageSize]=100";
-        StrapiMessageResponseDTO response = restTemplate.getForObject(url, StrapiMessageResponseDTO.class);
-        Map<String, Map<String, String>> messagesMap = StrapiMessageMapper.toI18nCacheMap(response);
+        System.out.println("🔄 [Redis-Cache] Caché de mensajes vacía. Consultando a Strapi por locale...");
 
-        if (redisCache != null && messagesMap != null) {
-            redisCache.put("allMessages", messagesMap);
-            System.out.println("✅ Mensajes guardados en Redis con éxito.");
+        Map<String, Map<String, String>> finalMessagesMap = new HashMap<>();
+
+        try {
+            for (String locale : List.of("es", "en")) {
+                String url = strapiUrl + "?pagination[pageSize]=100&locale=" + locale;
+                StrapiMessageResponseDTO response = restTemplate.getForObject(url, StrapiMessageResponseDTO.class);
+
+                Map<String, Map<String, String>> partialMap = StrapiMessageMapper.toI18nCacheMap(response);
+
+                if (partialMap != null && !partialMap.isEmpty()) {
+                    finalMessagesMap.putAll(partialMap);
+                    System.out.println("✅ Mensajes de sistema [" + locale + "] cargados.");
+                }
+            }
+
+            if (redisCache != null && !finalMessagesMap.isEmpty()) {
+                redisCache.put("allMessages", finalMessagesMap);
+                System.out.println("✅ Todos los mensajes guardados en Redis con éxito. Locales: " + finalMessagesMap.keySet());
+            }
+
+        } catch (Exception e) {
+            System.err.println("❌ Error cargando mensajes de Strapi: " + e.getMessage());
         }
 
-        return messagesMap;
+        return finalMessagesMap;
     }
 
     public void clearCache() {
         Cache redisCache = cacheManager.getCache("messageCatalog");
         if (redisCache != null) {
             redisCache.evict("allMessages");
-            System.out.println("🗑️ [Redis-Cache] Caché de mensajes limpiada.");
+            System.out.println("🗑️ [Redis-Cache] Caché de mensajes limpiada forzosamente.");
         }
     }
 
     @Override
     public String getMessageContent(MessagesEnum message) {
+        String currentLanguage = LocaleContextHolder.getLocale().getLanguage();
         Map<String, Map<String, String>> messageCache = loadAllMessagesFromStrapi();
+
+        // 🛠️ TU NUEVA LÓGICA: Si el caché tiene datos, pero NO contiene el idioma que pide el Header...
+        if (messageCache != null && !messageCache.isEmpty() && !messageCache.containsKey(currentLanguage)) {
+            System.out.println("⚠️ [Redis-Cache] El idioma '" + currentLanguage + "' no existe en el caché actual. ¡Datos desactualizados detectados!");
+            clearCache(); // Vaciamos el "allMessages" viejo de Redis
+            messageCache = loadAllMessagesFromStrapi(); // Forzamos la recarga bilingüe desde Strapi
+        }
 
         if (messageCache == null || messageCache.isEmpty()) {
             return message.name();
         }
 
-        String currentLanguage = LocaleContextHolder.getLocale().getLanguage();
         Map<String, String> localeMap = messageCache.get(currentLanguage);
 
         if (localeMap == null) {

@@ -6,10 +6,12 @@ import co.edu.uco.aurora.infrastructure.externalservices.notificationcatalog.dto
 import co.edu.uco.aurora.infrastructure.externalservices.notificationcatalog.dto.StrapiNotificationResponseDTO;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,11 +20,13 @@ public class StrapiNotificationCatalogAdapter implements NotificationCatalog {
 
     private final RestTemplate restTemplate;
     private final StrapiNotificationMapper mapper;
-    private final CacheManager cacheManager; // 🔥 Inyectamos el manejador de caché oficial de Spring
+    private final CacheManager cacheManager;
 
     private final String STRAPI_URL = "https://magical-positivity-b27a86edda.strapiapp.com/api/notifications?pagination[limit]=100";
 
-    public StrapiNotificationCatalogAdapter(RestTemplate restTemplate, StrapiNotificationMapper mapper, CacheManager cacheManager) {
+    public StrapiNotificationCatalogAdapter(RestTemplate restTemplate,
+                                            StrapiNotificationMapper mapper,
+                                            CacheManager cacheManager) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
         this.cacheManager = cacheManager;
@@ -31,58 +35,79 @@ public class StrapiNotificationCatalogAdapter implements NotificationCatalog {
     @Override
     public void loadCatalog() {
         try {
-            System.out.println("🔄 [Redis-Cache] Cargando catálogo fresco desde Strapi...");
-            StrapiNotificationResponseDTO response = restTemplate.getForObject(STRAPI_URL, StrapiNotificationResponseDTO.class);
+            System.out.println("🔄 [Redis-Cache] Cargando catálogo de notificaciones desde Strapi...");
 
-            if (response != null && response.getData() != null) {
-                Map<String, NotificationCatalogDTO> tempMap = new HashMap<>();
+            Map<String, Map<String, NotificationCatalogDTO>> byLocale = new HashMap<>();
 
-                response.getData().forEach(data -> {
-                    NotificationCatalogDTO dto = mapper.toCatalogDto(data);
-                    tempMap.put(dto.getKey(), dto);
-                });
+            // Consultar cada locale por separado
+            for (String locale : List.of("es", "en")) {
+                String url = STRAPI_URL + "&locale=" + locale;
+                StrapiNotificationResponseDTO response = restTemplate.getForObject(url, StrapiNotificationResponseDTO.class);
 
-                Cache redisCache = cacheManager.getCache("notificationsCache");
-                if (redisCache != null) {
-                    redisCache.put("allNotifications", tempMap);
+                if (response != null && response.getData() != null) {
+                    Map<String, NotificationCatalogDTO> localeMap = new HashMap<>();
+                    response.getData().forEach(data -> {
+                        NotificationCatalogDTO dto = mapper.toCatalogDto(data);
+                        localeMap.put(dto.getKey(), dto);
+                    });
+                    byLocale.put(locale, localeMap);
+                    System.out.println("✅ Notificaciones [" + locale + "] cargadas: " + localeMap.size());
                 }
-
-                System.out.println("✅ Catálogo de Notificaciones v5 guardado con éxito en Redis. Total: " + tempMap.size());
             }
+
+            Cache redisCache = cacheManager.getCache("notificationsCache");
+            if (redisCache != null) {
+                redisCache.put("allNotifications", byLocale);
+                System.out.println("✅ Catálogo guardado en Redis. Locales: " + byLocale.keySet());
+            }
+
         } catch (Exception e) {
-            System.err.println("❌ Error cargando catálogo de Strapi: " + e.getMessage());
+            System.err.println("❌ Error cargando catálogo de notificaciones: " + e.getMessage());
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public Optional<NotificationCatalogDTO> getNotificationByKey(String key) {
-        // 🔎 LEER DE REDIS: Intentamos recuperar el mapa del catálogo
         Cache redisCache = cacheManager.getCache("notificationsCache");
+        Map<String, Map<String, NotificationCatalogDTO>> byLocale = null;
 
         if (redisCache != null) {
             Cache.ValueWrapper wrapper = redisCache.get("allNotifications");
             if (wrapper != null) {
-                Map<String, NotificationCatalogDTO> cachedMap = (Map<String, NotificationCatalogDTO>) wrapper.get();
-                if (cachedMap != null) {
-                    return Optional.ofNullable(cachedMap.get(key));
+                byLocale = (Map<String, Map<String, NotificationCatalogDTO>>) wrapper.get();
+            }
+        }
+
+        if (byLocale == null) {
+            System.out.println("⚠️ [Redis-Cache] Caché de notificaciones vacía. Forzando recarga...");
+            loadCatalog();
+            if (redisCache != null) {
+                Cache.ValueWrapper wrapper = redisCache.get("allNotifications");
+                if (wrapper != null) {
+                    byLocale = (Map<String, Map<String, NotificationCatalogDTO>>) wrapper.get();
                 }
             }
         }
 
-        System.out.println("⚠️ [Redis-Cache] La caché estaba vacía al solicitar la llave: " + key + ". Forzando recarga...");
-        this.loadCatalog();
+        if (byLocale == null) return Optional.empty();
 
-        if (redisCache != null) {
-            Cache.ValueWrapper wrapper = redisCache.get("allNotifications");
-            if (wrapper != null) {
-                Map<String, NotificationCatalogDTO> cachedMap = (Map<String, NotificationCatalogDTO>) wrapper.get();
-                if (cachedMap != null) {
-                    return Optional.ofNullable(cachedMap.get(key));
-                }
-            }
+        String currentLocale = LocaleContextHolder.getLocale().getLanguage(); // "es" o "en"
+
+        Map<String, NotificationCatalogDTO> localeMap = byLocale.get(currentLocale);
+
+        if (localeMap == null) {
+            localeMap = byLocale.entrySet().stream()
+                    .filter(e -> e.getKey().startsWith(currentLocale))
+                    .map(Map.Entry::getValue)
+                    .findFirst()
+                    .orElse(null);
         }
 
-        return Optional.empty();
+        if (localeMap == null && !byLocale.isEmpty()) {
+            localeMap = byLocale.values().iterator().next();
+        }
+
+        return localeMap != null ? Optional.ofNullable(localeMap.get(key)) : Optional.empty();
     }
 }

@@ -6,20 +6,16 @@ import java.util.regex.Pattern;
 
 public final class TextHelper {
 
-    // Ya no son Strings estáticos con valor fijo
-    // sino acceso dinámico vía el catálogo
     private static ParameterCatalog parameterCatalog;
 
     private static final String EMPTY = "";
 
     private TextHelper() {}
 
-    // Spring llamará esto al inicializar el componente wrapper
     public static void setParameterCatalog(ParameterCatalog catalog) {
         TextHelper.parameterCatalog = catalog;
     }
 
-    // Getters dinámicos — cada vez que se llamen, van al cache (o recargan si está vacío)
     public static String getEmailRegex() {
         return parameterCatalog != null ? parameterCatalog.getParameterValue("EMAIL_REGEX") : null;
     }
@@ -36,7 +32,6 @@ public final class TextHelper {
         return parameterCatalog != null ? parameterCatalog.getParameterValue("ID_NUMBER_REGEX") : null;
     }
 
-    // --- El resto de métodos sin cambios ---
 
     public static String getDefault() { return EMPTY; }
 

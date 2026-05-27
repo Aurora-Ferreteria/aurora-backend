@@ -20,7 +20,7 @@ public final class ValidateCustomerEmail {
 
         StringValuesIsPresentRule.executeRule(sanitizedEmail, FIELD_NAME, true);
         StringLengthValuesIsValidRule.executeRule(sanitizedEmail, FIELD_NAME, 5, 150, true);
-        StringFormatValueIsValidRule.executeRule(sanitizedEmail, FIELD_NAME, TextHelper.getDefault(), true);
+        StringFormatValueIsValidRule.executeRule(sanitizedEmail, FIELD_NAME, TextHelper.getEmailRegex(), true);
 
         return sanitizedEmail;
     }
