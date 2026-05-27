@@ -5,10 +5,10 @@ import java.util.regex.Pattern;
 
 public final class TextHelper {
 
-    public static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-    public static final String PHONE_REGEX = "^\\+?\\d{7,20}$";
-    public static final String NAME_REGEX = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{3,100}$";
-    public static final String ID_NUMBER_REGEX = "^[0-9]+$";
+    public static String EMAIL_REGEX;
+    public static String PHONE_REGEX;
+    public static String NAME_REGEX;
+    public static String ID_NUMBER_REGEX;
 
     private static final String EMPTY = "";
 
