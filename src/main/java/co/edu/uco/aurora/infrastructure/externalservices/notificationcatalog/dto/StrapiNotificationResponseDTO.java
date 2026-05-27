@@ -5,7 +5,7 @@ import java.util.List;
 public class StrapiNotificationResponseDTO {
     private List<StrapiNotificationDataDTO> data;
 
-    // Getters y Setters
+
     public List<StrapiNotificationDataDTO> getData() { return data; }
     public void setData(List<StrapiNotificationDataDTO> data) { this.data = data; }
 }

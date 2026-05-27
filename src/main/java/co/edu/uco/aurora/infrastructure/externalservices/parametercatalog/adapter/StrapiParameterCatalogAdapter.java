@@ -4,7 +4,6 @@ import co.edu.uco.aurora.infrastructure.externalservices.parametercatalog.Parame
 import co.edu.uco.aurora.infrastructure.externalservices.parametercatalog.adapter.mapper.StrapiParameterMapper;
 import co.edu.uco.aurora.infrastructure.externalservices.parametercatalog.dto.ParameterCatalogDTO;
 import co.edu.uco.aurora.infrastructure.externalservices.parametercatalog.dto.StrapiParameterResponseDTO;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
@@ -30,21 +29,28 @@ public class StrapiParameterCatalogAdapter implements ParameterCatalog {
     }
 
     @Override
-    public void loadParameters() {
+    public Map<String, ParameterCatalogDTO> loadParameters() {
         try {
-            // Consumir Strapi Cloud usando RestTemplate nativo de tu app
+            System.out.println("⚠️ [Redis-Cache] Caché de parámetros vacía. Forzando recarga desde Strapi...");
             StrapiParameterResponseDTO response = restTemplate.getForObject(STRAPI_URL, StrapiParameterResponseDTO.class);
 
-            // Mapear al formato de mapa para Redis
+            if (response == null) {
+                System.err.println("❌ Respuesta de Strapi vacía para Parámetros.");
+                return null;
+            }
+
             Map<String, ParameterCatalogDTO> parameterMap = mapper.toMap(response);
 
-            // Guardar en la caché de Redis
             Cache cache = cacheManager.getCache("parameterCache");
-            if (cache != null) {
+            if (cache != null && parameterMap != null) {
                 cache.put("allParameters", parameterMap);
+                System.out.println("✅ Parámetros guardados en Redis con éxito. Total: " + parameterMap.size());
             }
+
+            return parameterMap;
         } catch (Exception e) {
-            throw new RuntimeException("Error crítico al inicializar el catálogo de parámetros desde Strapi Cloud", e);
+            System.err.println("❌ Error crítico al inicializar el catálogo de parámetros desde Strapi: " + e.getMessage());
+            return null;
         }
     }
 
@@ -54,7 +60,6 @@ public class StrapiParameterCatalogAdapter implements ParameterCatalog {
         Cache cache = cacheManager.getCache("parameterCache");
         Map<String, ParameterCatalogDTO> parameterMap = null;
 
-        // 1. Intentar leer desde Redis
         if (cache != null) {
             Cache.ValueWrapper wrapper = cache.get("allParameters");
             if (wrapper != null) {
@@ -62,18 +67,10 @@ public class StrapiParameterCatalogAdapter implements ParameterCatalog {
             }
         }
 
-        // 2. Si la caché está vacía, viaja a Strapi Cloud a recargar
         if (parameterMap == null) {
-            loadParameters();
-            if (cache != null) {
-                Cache.ValueWrapper wrapper = cache.get("allParameters");
-                if (wrapper != null) {
-                    parameterMap = (Map<String, ParameterCatalogDTO>) wrapper.get();
-                }
-            }
+            parameterMap = loadParameters();
         }
 
-        // 3. Retornar el valor de la regex correspondiente
         if (parameterMap != null && parameterMap.containsKey(key)) {
             return parameterMap.get(key).getValue();
         }
